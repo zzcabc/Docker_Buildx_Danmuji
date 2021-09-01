@@ -54,11 +54,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Clone
         run: |
-          cd Dockerfile
           sudo apt-get install unzip
           wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
           sudo unzip danmuji.zip
-          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar /tmp/danmuji.jar       
+          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji/danmuji.jar       
       # 构建 Arm 框架镜像
       #- name: Build linux/arm/v7
       #  uses: docker/build-push-action@v2
@@ -74,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile/Dockerfile.test
+          file: ./Dockerfile.test
           platforms: linux/arm64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -84,7 +83,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile/Dockerfile.test
+          file: ./Dockerfile.test
           platforms: linux/amd64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
