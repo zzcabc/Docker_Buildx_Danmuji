@@ -30,7 +30,7 @@ jobs:
         # TAG_VERSION ： 标签版本
         # TAG_LATEST ： 最新版本
         run: |
-          IMAGE_NAME=弹幕姬
+          IMAGE_NAME=danmuji
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
