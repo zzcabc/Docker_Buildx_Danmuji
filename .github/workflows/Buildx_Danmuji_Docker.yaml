@@ -1,5 +1,5 @@
 # 利用GitHub Action自动构建多框架的docker镜像
-name: Buildx_DDTV_Docker
+name: Buildx_Danmuji_Docker
 
 on:
   # main分支的push操作会触发当前脚本的执行
@@ -14,7 +14,7 @@ on:
 
 
 jobs:
-  Buildx_DDTV_Docker:
+  Buildx_Danmuji_Docker:
     # 运行在Ubuntu系统上
     runs-on: ubuntu-latest
     # 步骤
@@ -56,9 +56,9 @@ jobs:
         run: |
           sudo apt-get install unzip
           wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
-          unzip danmuji.zip
+          sudo unzip danmuji.zip
           cd danmuji
-          sudo cp BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar /usr/danmuji.jar
+          sudo mv BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji.jar
       # 构建 Arm 框架镜像
       #- name: Build linux/arm/v7
       #  uses: docker/build-push-action@v2
