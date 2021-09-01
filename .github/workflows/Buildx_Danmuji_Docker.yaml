@@ -54,9 +54,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Clone
         run: |
-          cd ./Dockerfile
+          cd Dockerfile
           pwd
-          
+
           sudo apt-get install unzip
           wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
           sudo unzip danmuji.zip
