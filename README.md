@@ -21,7 +21,7 @@ docker run -d \
        -v 本机路径:/danmuji/log \                 弹幕姬保存弹幕
        -v 本机路径:/danmuji/guardFile \           弹幕姬上舰私信
        -v 本机路径:/danmuji/Danmuji_log \         弹幕姬日志
-       zzcabc/danmuji
+       zzcabc/danmuji:latest
 ```
 
 ### 如果你发现上面图标版本不一致，请点击一下star，这样会触发自动构建镜像，即使你之后取消star
