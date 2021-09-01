@@ -58,7 +58,7 @@ jobs:
           sudo apt-get install unzip
           wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
           sudo unzip danmuji.zip
-          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji.jar       
+          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar /usr/danmuji.jar       
       # 构建 Arm 框架镜像
       #- name: Build linux/arm/v7
       #  uses: docker/build-push-action@v2
