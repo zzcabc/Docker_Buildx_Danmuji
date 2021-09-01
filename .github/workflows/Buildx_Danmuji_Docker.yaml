@@ -61,7 +61,7 @@ jobs:
           sudo unzip danmuji.zip
           pwd
           ls
-          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar Dockerfile/danmuji.jar
+          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji.jar
           pwd
           ls
           cd Dockerfile
@@ -82,7 +82,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile/Dockerfile
+          file: ./Dockerfile/Dockerfile.test
           platforms: linux/arm64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -92,7 +92,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile/Dockerfile
+          file: ./Dockerfile/Dockerfile.test
           platforms: linux/amd64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
