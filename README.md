@@ -6,7 +6,7 @@
 
 使用GitHub Action自动构建[BanqiJane/Bilibili_Danmuji](https://github.com/BanqiJane/Bilibili_Danmuji)的Docker镜像
 
-[B站用户西凉君君提供](https://registry.hub.docker.com/r/xilianghe/danmuji)
+[B站用户西凉君君提供的Docker镜像](https://registry.hub.docker.com/r/xilianghe/danmuji)
 
 
 armv8和amd64框架使用 **openjdk:11.0.10-jre-slim**
