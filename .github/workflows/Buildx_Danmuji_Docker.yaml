@@ -59,6 +59,7 @@ jobs:
           sudo unzip danmuji.zip
           cd danmuji
           sudo mv BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji.jar
+          pwd
       # 构建 Arm 框架镜像
       #- name: Build linux/arm/v7
       #  uses: docker/build-push-action@v2
