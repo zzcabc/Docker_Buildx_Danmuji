@@ -65,6 +65,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
       - name: Build with Gradle
         run: |
           sudo apt-get install git
@@ -72,15 +73,11 @@ jobs:
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
+          sudo mv $(find build -type f -size +10M) ././danmuji.jar
           pwd
           ls
-          cd build
-          pwd
+          cd Bilibili_Danmuji
           ls
-          cd libs
-          pwd
-          ls
-          mv $(find -type f -size +10M) danmuji.jar
       - name: See
         run: |
           pwd
