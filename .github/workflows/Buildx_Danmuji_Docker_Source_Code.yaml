@@ -35,7 +35,7 @@ jobs:
         run: |
           IMAGE_NAME=danmuji-code
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
-          DOCKERHUB_VERSION=$(ubuntu@10-23-71-199:~$ curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji-code/tags" | awk '{print $318;exit}' FS='[""]')
+          DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji-code/tags" | awk '{print $318;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
           echo ::set-output name=image_name::${IMAGE_NAME}
