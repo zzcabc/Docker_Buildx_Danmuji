@@ -45,5 +45,6 @@ jobs:
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
-          ./gradlew build -x test --debug
+          sudo chmod +x ./gradlew
+          sudo ./gradlew build -x test --debug
 
