@@ -46,15 +46,18 @@ jobs:
 
         # 初始化Docker Buildx
       - name: Set up Docker Buildx
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/setup-buildx-action@v1
 
         # 登录到DockerHub
       - name: Login to DockerHub
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Get the release
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
           sudo apt-get install unzip
           wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
@@ -62,6 +65,7 @@ jobs:
           sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji/danmuji.jar       
       # 构建 Arm 框架镜像
       - name: Build linux/arm/v7
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -72,6 +76,7 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
       # 构建 Arm64 框架镜像
       - name: Build linux/arm64
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -82,6 +87,7 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
       # 构建 Amd64 框架镜像
       - name: Build linux/amd64
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -92,6 +98,7 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64
 #创建并推送多架构镜像
       - name: Create and push manifest lists
+        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
           docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-amd64 \
