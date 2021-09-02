@@ -43,6 +43,8 @@ jobs:
           echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
+
+          
       - name: Set up QEMU
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/setup-qemu-action@v1
@@ -59,14 +61,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+        # 初始化 JDK8 环境
       - name: Set up JDK 8
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: actions/setup-java@v2
         with:
           java-version: '8'
           distribution: 'adopt'
       # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
+      # 使用Gradle编译构建同时命名danmuji.jar
       - name: Build with Gradle
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
@@ -74,15 +79,95 @@ jobs:
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ././danmuji.jar
-          pwd
-          ls
-          cd Bilibili_Danmuji
-          ls
-      - name: See
+      # 构建 Arm 框架镜像
+      - name: Build linux/arm/v7
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.code
+          platforms: linux/arm/v7
+          push: true
+          build-args: ${{ steps.prepare.outputs.build_args }}
+          tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
+      # 构建 Arm64 框架镜像
+      - name: Build linux/arm64
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.code
+          platforms: linux/arm64
+          push: true
+          build-args: ${{ steps.prepare.outputs.build_args }}
+          tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
+      # 构建 Amd64 框架镜像
+      - name: Build linux/amd64
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.code
+          platforms: linux/amd64
+          push: true
+          build-args: ${{ steps.prepare.outputs.build_args }}
+          tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64
+      #创建并推送多架构镜像
+      - name: Create and push manifest lists
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
-          pwd
-          ls
-          cd Bilibili_Danmuji
-          pwd
-          ls
+          docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
+              ${{ steps.prepare.outputs.tag_version }}-amd64 \
+              ${{ steps.prepare.outputs.tag_version }}-arm64v8 \
+              ${{ steps.prepare.outputs.tag_version }}-arm32v7
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
+              ${{ steps.prepare.outputs.tag_version }}-amd64 \
+              --arch=amd64 \
+              --os=linux  \
+              --os-version=openjdk:11.0.10-jre-slim
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
+              ${{ steps.prepare.outputs.tag_version }}-arm64v8 \
+              --arch=arm64 \
+              --os=linux  \
+              --variant=v8 \
+              --os-version=openjdk:11.0.10-jre-slim
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
+              ${{ steps.prepare.outputs.tag_version }}-arm32v7 \
+              --arch=arm \
+              --os=linux  \
+              --variant=v7 \
+              --os-version=openjdk:11.0.1-jre-slim
+          
+          docker manifest push ${{ steps.prepare.outputs.tag_version }}
+          
+          docker manifest create -a ${{ steps.prepare.outputs.tag_latest }} \
+              ${{ steps.prepare.outputs.tag_latest }}-amd64 \
+              ${{ steps.prepare.outputs.tag_latest }}-arm64v8 \
+              ${{ steps.prepare.outputs.tag_latest }}-arm32v7
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
+              ${{ steps.prepare.outputs.tag_latest }}-amd64 \
+              --arch=amd64 \
+              --os=linux  \
+              --os-version=openjdk:11.0.10-jre-slim
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
+              ${{ steps.prepare.outputs.tag_latest }}-arm64v8 \
+              --arch=arm64 \
+              --os=linux  \
+              --variant=v8 \
+              --os-version=openjdk:11.0.10-jre-slim
+          
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
+              ${{ steps.prepare.outputs.tag_latest }}-arm32v7 \
+              --arch=arm \
+              --os=linux  \
+              --variant=v7 \
+              --os-version=openjdk:11.0.1-jre-slim
+          
+          docker manifest push ${{ steps.prepare.outputs.tag_latest }}
+
 
