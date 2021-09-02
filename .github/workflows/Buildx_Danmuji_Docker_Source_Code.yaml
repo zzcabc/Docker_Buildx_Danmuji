@@ -22,9 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     # 步骤
     steps:
-      # 切换到主分支
-      - name: Checkout
-        uses: actions/checkout@main
+      
       - name: Prepare
         id: prepare
         # IMAGE_NAME ： 镜像名称
@@ -43,7 +41,9 @@ jobs:
           echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
-
+      # 切换到主分支
+      - name: Checkout
+        uses: actions/checkout@main
 
       - name: Set up QEMU
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
