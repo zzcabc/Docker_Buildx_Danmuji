@@ -69,8 +69,6 @@ jobs:
         run: |
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git  
-      - name: Grant execute permission for gradlew
-        run: 
       - name: Build with Gradle
         run: |
           cd Bilibili_Danmuji
