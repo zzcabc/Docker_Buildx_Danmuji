@@ -47,6 +47,12 @@ jobs:
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo ./gradlew assembleRelease -x test
-          cd build/libs
+          mv $(find -type f -size +10M) danmuji.jar
+      - name: Build with Gradle
+        run: |
+          pwd
+          ls
+          cd Bilibili_Danmuji
+          pwd
           ls
 
