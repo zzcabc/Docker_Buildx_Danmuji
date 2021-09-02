@@ -35,5 +35,5 @@ jobs:
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
-          gradle build -x test
+          gradle build -x test --debug
 
