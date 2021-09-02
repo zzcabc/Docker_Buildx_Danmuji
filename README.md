@@ -27,9 +27,9 @@
 docker run -d \
        --name danmuji \
        -p 本机端口:23333 \
-       -v 本机路径:/danmuji/log \                 弹幕姬保存弹幕
+       -v 本机路径:/danmuji/Danmuji_log \         弹幕姬保存弹幕
        -v 本机路径:/danmuji/guardFile \           弹幕姬上舰私信(非必须映射)
-       -v 本机路径:/danmuji/Danmuji_log \         弹幕姬日志(非必须映射)
+       -v 本机路径:/danmuji/log \                 弹幕姬日志(非必须映射)
        zzcabc/danmuji:latest
 ```
 
