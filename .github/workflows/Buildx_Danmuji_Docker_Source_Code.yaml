@@ -30,13 +30,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Get the Release
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
-        run: |
-          sudo apt-get install git
-          git clone https://github.com/BanqiJane/Bilibili_Danmuji.git  
       - name: Build with Gradle
         run: |
+          sudo apt-get install git
+          git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
           gradle build -x test
 
