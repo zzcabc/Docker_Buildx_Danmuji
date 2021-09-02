@@ -77,7 +77,7 @@ jobs:
           cd build
           pwd
           ls
-          cd lib
+          cd libs
           pwd
           ls
           mv $(find -type f -size +10M) danmuji.jar
