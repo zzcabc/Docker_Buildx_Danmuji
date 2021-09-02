@@ -22,9 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     # 步骤
     steps:
-      # 切换到主分支
-      - name: Checkout
-        uses: actions/checkout@main
       - name: Prepare
         id: prepare
         # IMAGE_NAME ： 镜像名称
@@ -33,9 +30,9 @@ jobs:
         # TAG_VERSION ： 标签版本
         # TAG_LATEST ： 最新版本
         run: |
-          IMAGE_NAME=danmuji-task
+          IMAGE_NAME=danmuji-code
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
-          DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}/tags" | awk '{print $320;exit}' FS='[""]')
+          DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji-code/tags" | awk '{print $318;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
           echo ::set-output name=image_name::${IMAGE_NAME}
@@ -43,6 +40,11 @@ jobs:
           echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
+      # 切换到主分支
+      - name: Checkout
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: actions/checkout@main
+
       - name: Set up QEMU
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/setup-qemu-action@v1
@@ -59,26 +61,25 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Get the Release
+        # 初始化 JDK8 环境
+      - name: Set up JDK 8
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
+      # 使用Gradle编译构建同时命名danmuji.jar
+      - name: Build with Gradle
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
-          sudo apt-get install unzip
-          wget https://github.com/BanqiJane/Bilibili_Danmuji/releases/download/${{ steps.prepare.outputs.build_args }}/danmuji.zip
-          sudo unzip danmuji.zip
-          sudo mv danmuji/BiliBili_Danmuji-${{ steps.prepare.outputs.build_args }}beta.jar danmuji/danmuji.jar       
+          sudo apt-get install git
+          git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
+          cd Bilibili_Danmuji
+          sudo chmod +x ./gradlew
+          sudo ./gradlew build -x test
+          sudo mv $(find build -type f -size +10M) ././danmuji.jar
       # 构建 Arm 框架镜像
-      - name: Build linux/arm/v7
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile.armv7
-          platforms: linux/arm/v7
-          push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
-      # 构建 Arm64 框架镜像
       - name: Build linux/arm64
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
@@ -100,7 +101,7 @@ jobs:
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64
-#创建并推送多架构镜像
+      #创建并推送多架构镜像
       - name: Create and push manifest lists
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |

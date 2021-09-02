@@ -6,7 +6,8 @@
 
 本项目使用Docker Buildx构建全平台镜像，支持linux/armv7、linux/armv8、linux/amd64框架
 
-使用GitHub Action自动构建[BanqiJane/Bilibili_Danmuji](https://github.com/BanqiJane/Bilibili_Danmuji)的Docker镜像
+使用GitHub Action中国时间**0:00**自动拉取[BanqiJane/Bilibili_Danmuji](https://github.com/BanqiJane/Bilibili_Danmuji)的源码进行构建Docker镜像
+
 
 [B站用户西凉君君提供的Docker镜像](https://registry.hub.docker.com/r/xilianghe/danmuji)
 
@@ -34,11 +35,11 @@ docker run -d \
 ```
 
 
-### 注意：本项目会拉取releases最新的danmuji.zip构建镜像,因包内名称为BiliBili_Danmuji-版本号beta.jar,如上游发生变化，则无法成功构建镜像
+### ~注意：本项目会拉取releases最新的danmuji.zip构建镜像,因包内名称为BiliBili_Danmuji-版本号beta.jar,如上游发生变化，则无法成功构建镜像~
 
 ## TODO
 
-- [ ] 添加判断，如果releases的版本与DockerHub的版本一致,则不重新构建镜像
-- [ ] 每日定时构建镜像,当上有发布新版本最长也就时隔24小时更新
-- [ ] 使用源码构建镜像,解决上述注意事项(但我不会！！！！)
+- [x] 添加判断，如果releases的版本与DockerHub的版本一致,则不重新构建镜像
+- [x] 每日定时构建镜像,当上有发布新版本最长也就时隔24小时更新
+- [x] 使用源码构建镜像,解决上述注意事项(但我不会！！！！)   上面三项同时解决
 - [ ] 将镜像上传阿里镜像仓库
