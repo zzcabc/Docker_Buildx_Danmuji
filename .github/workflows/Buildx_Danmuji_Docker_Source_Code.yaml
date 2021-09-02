@@ -74,7 +74,10 @@ jobs:
           sudo ./gradlew build -x test
           pwd
           ls
-          cd build/lib
+          cd build
+          pwd
+          ls
+          cd lib
           pwd
           ls
           mv $(find -type f -size +10M) danmuji.jar
