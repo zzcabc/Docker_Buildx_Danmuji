@@ -46,7 +46,7 @@ jobs:
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
-          sudo ./gradlew build -x test
+          sudo ./gradlew assembleRelease -x test
           cd build/libs
           ls
 
