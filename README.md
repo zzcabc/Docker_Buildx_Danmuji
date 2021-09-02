@@ -11,9 +11,12 @@
 [B站用户西凉君君提供的Docker镜像](https://registry.hub.docker.com/r/xilianghe/danmuji)
 
 
+
 armv8和amd64框架使用 **openjdk:11.0.10-jre-slim**
 
-armv7框架使用 **openjdk:11.0.1-jre-slim**
+armv7框架使用 **openjdk:11.0.1-jre-slim** 
+
+**别问为什么使用jdk11,因为armv7的底包太难找了,使用jre为底包是因为Java运行仅需jre,可以减小体积**
 
 **使用方式**
 
