@@ -32,10 +32,12 @@ jobs:
         run: |
           IMAGE_NAME=danmuji
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
+          DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}/tags" | awk '{print $320;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
           echo ::set-output name=image_name::${IMAGE_NAME}
           echo ::set-output name=build_args::${VERSION}
+          echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
       - name: Set up QEMU
@@ -100,21 +102,21 @@ jobs:
               ${{ steps.prepare.outputs.tag_version }}-amd64 \
               --arch=amd64 \
               --os=linux  \
-              --os-version=aspnet:5.0-alpine
+              --os-version=openjdk:11.0.10-jre-slim
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-arm64v8 \
               --arch=arm64 \
               --os=linux  \
               --variant=v8 \
-              --os-version=aspnet:5.0-alpine
+              --os-version=openjdk:11.0.10-jre-slim
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-arm32v7 \
               --arch=arm \
               --os=linux  \
               --variant=v7 \
-              --os-version=aspnet:5.0-debian
+              --os-version=openjdk:11.0.1-jre-slim
           
           docker manifest push ${{ steps.prepare.outputs.tag_version }}
           
@@ -127,20 +129,20 @@ jobs:
               ${{ steps.prepare.outputs.tag_latest }}-amd64 \
               --arch=amd64 \
               --os=linux  \
-              --os-version=aspnet:5.0-alpine
+              --os-version=openjdk:11.0.10-jre-slim
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-arm64v8 \
               --arch=arm64 \
               --os=linux  \
               --variant=v8 \
-              --os-version=aspnet:5.0-alpine
+              --os-version=openjdk:11.0.10-jre-slim
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-arm32v7 \
               --arch=arm \
               --os=linux  \
               --variant=v7 \
-              --os-version=aspnet:5.0-debian
+              --os-version=openjdk:11.0.1-jre-slim
           
           docker manifest push ${{ steps.prepare.outputs.tag_latest }}
