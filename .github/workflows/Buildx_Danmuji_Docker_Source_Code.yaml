@@ -30,6 +30,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+          architecture: x64
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
@@ -44,5 +45,5 @@ jobs:
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
-          gradle build -x test --debug
+          ./gradlew build -x test --debug
 
