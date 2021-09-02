@@ -73,5 +73,5 @@ jobs:
         run: |
           cd Bilibili_Danmuji
           chmod +x gradlew
-          ./gradlew build
+          gradle build -x test
 
