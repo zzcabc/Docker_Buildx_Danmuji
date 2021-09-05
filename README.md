@@ -30,14 +30,10 @@
 
 
 
-| 架构 |       底包       | 大小                             |
-
-| ----- | :--------------------------: | ------------------------------------------------------------ |
-
+| 架构 |       底包       | 大小  |
+| ---- | ---- | ---- |
 | Amd64 | **openjdk:11.0.10-jre-slim** | [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/zzcabc/danmuji/latest-amd64?label=latest-amd64&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated) |
-
 | Armv8 | **openjdk:11.0.10-jre-slim** | [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/zzcabc/danmuji/latest-arm64v8?label=latest-arm64v8&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated) |
-
 | Armv7 | **openjdk:11.0.1-jre-slim** | [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/zzcabc/danmuji/latest-arm32v7?label=latest-arm32v7&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated) |
 
 
