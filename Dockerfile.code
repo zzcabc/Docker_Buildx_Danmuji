@@ -4,4 +4,5 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' 
 COPY Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
 EXPOSE 23333
 VOLUME /danmuji/Danmuji_log /danmuji/guardFile /danmuji/log
-ENTRYPOINT ["java", "-jar", "danmuji.jar"]
+#ENTRYPOINT ["java", "-jar", "danmuji.jar"]
+ENTRYPOINT ["sh","-c","java ${JAVA_OPTS} -jar /danmuji.jar"]
