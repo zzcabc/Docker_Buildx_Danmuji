@@ -195,9 +195,9 @@ jobs:
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-armv5 \
-              --arch=armv5 \
+              --arch=arm \
               --os=linux  \
-              --variant=v8 \
+              --variant=v5 \
               --os-version=openjdk:8u181-jre-slim
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
@@ -253,9 +253,9 @@ jobs:
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-armv5 \
-              --arch=armv5 \
+              --arch=arm \
               --os=linux  \
-              --variant=v8 \
+              --variant=v5 \
               --os-version=openjdk:8u181-jre-slim
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
