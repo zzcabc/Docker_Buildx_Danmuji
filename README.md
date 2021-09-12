@@ -17,6 +17,7 @@
 
 
 本项目使用Docker Buildx构建全平台镜像，支持linux/armv7、linux/armv8、linux/amd64框架
+测试版本加入linux/armv5、linux/386、linux/ppc64le、linux/s390x并采用openjdk:8u181-jre-slim作为底包
 
 
 
