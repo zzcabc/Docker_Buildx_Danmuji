@@ -18,7 +18,7 @@
 
 本项目使用Docker Buildx构建全平台镜像，支持linux/armv7、linux/armv8、linux/amd64框架
 
-测试版本加入linux/armv5、linux/386、linux/ppc64le、linux/s390x并采用openjdk:8u181-jre-slim作为底包
+[测试版本](https://hub.docker.com/r/zzcabc/danmuji-code)加入linux/armv5、linux/386、linux/ppc64le、linux/s390x并采用openjdk:8u181-jre-slim作为底包
 
 
 
@@ -55,10 +55,11 @@
 docker run -d \
     --name danmuji \
     -p 本机端口:23333 \
+    -e JAVA_OPTS=-Xms64m -Xmx128m \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
-    -v 本机弹幕姬配置文件路径:/danmuji/DanmujiProfile
+    -v 本机弹幕姬配置文件路径:/danmuji/DanmujiProfile \
     zzcabc/danmuji:latest
 
 ```
@@ -66,6 +67,8 @@ docker run -d \
 **映射路径说明** 
 
 此说明对应Docker容器内
+
+JAVA_OPTS=-Xms64m -Xmx128m               限制内存(**可能无效果**)
 
 /danmuji/Danmuji_log                   弹幕姬保存弹幕文件夹
 
@@ -87,10 +90,10 @@ docker run -d \
 
 
 
-- [x] 添加判断，如果releases的版本与DockerHub的版本一致,则不重新构建镜像
+- [x] 添加判断，如果releases的版本与DockerHub的版本一致，则不重新构建镜像
 
-- [x] 每日定时构建镜像,当上有发布新版本最长也就时隔24小时更新
+- [x] 每日定时构建镜像，当上有发布新版本最长也就时隔24小时更新
 
-- [x] 使用源码构建镜像,解决上述注意事项(但我不会！！！！)  上面三项同时解决
+- [x] 使用源码构建镜像，解决上述注意事项(但我不会！！！！)  上面三项同时解决
 
 - [ ] 将镜像上传阿里镜像仓库
