@@ -157,16 +157,16 @@ jobs:
           build-args: ${{ steps.prepare.outputs.build_args }}
           tags: ${{ steps.prepare.outputs.tag_version }}-s390x,${{ steps.prepare.outputs.tag_latest }}-s390x
       # 构建 Windows 框架镜像
-      - name: Build windows/amd64
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile.windows
-          platforms: windows/amd64
-          push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-windows,${{ steps.prepare.outputs.tag_latest }}-windows
+      # - name: Build windows/amd64
+      #   #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile.windows
+      #     platforms: windows/amd64
+      #     push: true
+      #     build-args: ${{ steps.prepare.outputs.build_args }}
+      #     tags: ${{ steps.prepare.outputs.tag_version }}-windows,${{ steps.prepare.outputs.tag_latest }}-windows
       #创建并推送多架构镜像
       - name: Create and push manifest lists
         #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
@@ -178,8 +178,7 @@ jobs:
               ${{ steps.prepare.outputs.tag_version }}-s390x     \
               ${{ steps.prepare.outputs.tag_version }}-armv5     \
               ${{ steps.prepare.outputs.tag_version }}-arm32v7   \
-              ${{ steps.prepare.outputs.tag_version }}-arm64v8  \ 
-              ${{ steps.prepare.outputs.tag_version }}-windows
+              ${{ steps.prepare.outputs.tag_version }}-arm64v8
               
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-386 \
@@ -226,11 +225,7 @@ jobs:
               --variant=v8 \
               --os-version=openjdk:8u181-jre-slim
               
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-windows \
-              --arch=amd64 \
-              --os=windows  \
-              --os-version=openjdk:17-windowsservercore-1809
+
           
           docker manifest push ${{ steps.prepare.outputs.tag_version }}
 
@@ -243,8 +238,7 @@ jobs:
               ${{ steps.prepare.outputs.tag_latest }}-s390x     \
               ${{ steps.prepare.outputs.tag_latest }}-armv5     \
               ${{ steps.prepare.outputs.tag_latest }}-arm32v7   \
-              ${{ steps.prepare.outputs.tag_latest }}-arm64v8   \
-              ${{ steps.prepare.outputs.tag_latest }}-windows
+              ${{ steps.prepare.outputs.tag_latest }}-arm64v8
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-386 \
@@ -291,11 +285,7 @@ jobs:
               --variant=v8 \
               --os-version=openjdk:8u181-jre-slim
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-windows \
-              --arch=amd64 \
-              --os=windows  \
-              --os-version=openjdk:17-windowsservercore-1809
+
 
           docker manifest push ${{ steps.prepare.outputs.tag_latest }}
 
