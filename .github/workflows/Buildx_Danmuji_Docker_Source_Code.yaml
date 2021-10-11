@@ -1,5 +1,5 @@
 # 利用GitHub Action自动构建多框架的docker镜像
-name: Buildx_Danmuji_Docker_Source_Code
+name: Buildx_Danmuji_Docker_Test
 
 on:
   # master分支的push操作会触发当前脚本的执行
@@ -17,7 +17,7 @@ on:
 
 
 jobs:
-  Buildx_Danmuji_Docker_Source_Code:
+  Buildx_Danmuji_Docker_Test:
     # 运行在Ubuntu系统上
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'test')"
