@@ -3,8 +3,10 @@ name: Buildx_Danmuji_Docker_Source_Code
 
 on:
   # master分支的push操作会触发当前脚本的执行
-  push:
-    branches: [ master ]
+  repository_dispatch:
+    types: [test]
+  # push:
+  #   branches: [ master ]
   # master分支的pr操作会触发当前脚本的执行
 #  pull_request:
 #    branches: [ master ]
@@ -17,6 +19,9 @@ on:
 
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[build]')"
   Buildx_Danmuji_Docker_Source_Code:
     # 运行在Ubuntu系统上
     runs-on: ubuntu-latest
