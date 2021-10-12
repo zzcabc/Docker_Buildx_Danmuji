@@ -79,8 +79,19 @@ jobs:
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ././danmuji.jar
-      # 构建 Arm 框架镜像
-      - name: Build linux/arm64
+      # 构建 Armv7 框架镜像
+      - name: Build linux/arm/v7
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.armv7
+          platforms: linux/arm/v7
+          push: true
+          build-args: ${{ steps.prepare.outputs.build_args }}
+          tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
+      # 构建 Arm64 框架镜像
+      - name: Build linux/arm/v8
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
@@ -101,7 +112,7 @@ jobs:
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64
-#创建并推送多架构镜像
+      #创建并推送多架构镜像
       - name: Create and push manifest lists
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
