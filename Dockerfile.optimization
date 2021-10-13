@@ -6,8 +6,8 @@ RUN apt update && \
     apt install git && \
     git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
 RUN cd Bilibili_Danmuji && \
-    chmod +x ./gradlew && 、
-    pwd && ll
+    chmod +x ./gradlew && \
+    pwd && ls
 
 RUN ./gradlew build -x test && \
     mv $(find build -type f -size +10M) /danmuji/danmuji.jar &&\
