@@ -23,6 +23,24 @@ jobs:
     if: "contains(github.event.head_commit.message, 'o')"
     # 步骤
     steps:
+      - name: Prepare
+        id: prepare
+        # IMAGE_NAME ： 镜像名称
+        # VERSION ： 源码版本
+        # DOCKERHUB_VERSION ： DockerHub 镜像版本
+        # TAG_VERSION ： 标签版本
+        # TAG_LATEST ： 最新版本
+        run: |
+          IMAGE_NAME=danmuji
+          VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
+          DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji/tags" | awk '{print $320;exit}' FS='[""]')
+          TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
+          TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
+          echo ::set-output name=image_name::${IMAGE_NAME}
+          echo ::set-output name=build_args::${VERSION}
+          echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
+          echo ::set-output name=tag_version::${TAG_VERSION}
+          echo ::set-output name=tag_latest::${TAG_LATEST}
       # 切换到主分支
       - name: Checkout
         if: "contains(github.event.head_commit.message, 'o')"
