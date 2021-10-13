@@ -9,7 +9,7 @@ RUN cd Bilibili_Danmuji && \
     chmod +x gradle && \
     pwd && ls
 
-RUN ./gradle build -x test && \
+RUN gradle build -x test && \
     mv $(find build -type f -size +10M) /danmuji/danmuji.jar &&\
     cd .. && \
     rm -r Bilibili_Danmuji
