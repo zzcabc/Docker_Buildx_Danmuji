@@ -1,5 +1,5 @@
 # 利用GitHub Action自动构建多框架的docker镜像
-name: Buildx_Danmuji_Docker_Test
+name: Buildx_Danmuji_Docker_Optimization
 
 on:
   # master分支的push操作会触发当前脚本的执行
@@ -17,7 +17,7 @@ on:
 
 
 jobs:
-  Buildx_Danmuji_Docker_Test:
+  Buildx_Danmuji_Docker_Optimization:
     # 运行在Ubuntu系统上
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'o')"
@@ -48,26 +48,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        # 初始化 JDK8 环境
-      - name: Set up JDK 8
-        if: "contains(github.event.head_commit.message, 'o')"
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
-        uses: actions/setup-java@v2
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-      # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
-      # 使用Gradle编译构建同时命名danmuji.jar
-      - name: Build with Gradle
-        if: "contains(github.event.head_commit.message, 'o')"
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
-        run: |
-          sudo apt-get install git
-          git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
-          cd Bilibili_Danmuji
-          sudo chmod +x ./gradlew
-          sudo ./gradlew build -x test
-          sudo mv $(find build -type f -size +10M) ././danmuji.jar
       # 构建 Armv7 框架镜像
       - name: Build linux/arm/v7
         if: "contains(github.event.head_commit.message, 'o')"
