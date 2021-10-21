@@ -71,7 +71,7 @@ jobs:
       # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
       # 使用Gradle编译构建同时命名danmuji.jar
       - name: Build with Gradle
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        # if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
@@ -81,8 +81,7 @@ jobs:
           sudo mv $(find build -type f -size +10M) ././danmuji.jar
       # 构建 386 框架镜像
       - name: Build linux/386
-        if: "contains(github.event.head_commit.message, 'test')"
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        # if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -104,7 +103,6 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64   
       # 构建 Armv5 框架镜像
       - name: Build linux/arm/v5
-        if: "contains(github.event.head_commit.message, 'test')"
         #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
@@ -138,7 +136,6 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-armv8,${{ steps.prepare.outputs.tag_latest }}-armv8
       # 构建 ppc64le 框架镜像
       - name: Build linux/ppc64le
-        if: "contains(github.event.head_commit.message, 'test')"
         #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
@@ -150,8 +147,7 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-ppc64le,${{ steps.prepare.outputs.tag_latest }}-ppc64le
       # 构建 s390x 框架镜像
       - name: Build linux/s390x
-        if: "contains(github.event.head_commit.message, 'test')"
-        #if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        # if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -162,7 +158,7 @@ jobs:
           tags: ${{ steps.prepare.outputs.tag_version }}-s390x,${{ steps.prepare.outputs.tag_latest }}-s390x
       #创建并推送多架构镜像
       - name: Create and push manifest lists
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        # if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         run: |
           docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-386          \
