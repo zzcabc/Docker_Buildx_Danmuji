@@ -242,7 +242,7 @@ jobs:
               ${{ steps.prepare.outputs.tag_latest }}-armv5  \
               --arch=arm  \
               --os=linux  \
-              ----variant=v5 \
+              --variant=v5 \
               --os-version=openjdk:11.0.3-jre-slim
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
