@@ -85,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/386
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -96,29 +96,29 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/amd64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64   
-      # 构建 Armv5 框架镜像
-      - name: Build linux/arm/v5
+      # 构建 armv6 框架镜像
+      - name: Build linux/arm/v6
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
-          platforms: linux/arm/v5
+          file: ./Dockerfile.code
+          platforms: linux/arm/v6
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-armv5,${{ steps.prepare.outputs.tag_latest }}-armv5
+          tags: ${{ steps.prepare.outputs.tag_version }}-armv6,${{ steps.prepare.outputs.tag_latest }}-armv6
       # 构建 Armv7 框架镜像
       - name: Build linux/arm/v7
         if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/arm/v7
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -129,7 +129,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/arm64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -140,7 +140,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/ppc64le
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -151,7 +151,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.code
           platforms: linux/s390x
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
@@ -163,7 +163,7 @@ jobs:
           docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-386          \
               ${{ steps.prepare.outputs.tag_version }}-amd64        \
-              ${{ steps.prepare.outputs.tag_version }}-armv5        \
+              ${{ steps.prepare.outputs.tag_version }}-armv6        \
               ${{ steps.prepare.outputs.tag_version }}-armv7        \
               ${{ steps.prepare.outputs.tag_version }}-armv8        \
               ${{ steps.prepare.outputs.tag_version }}-ppc64le      \
@@ -173,46 +173,46 @@ jobs:
               ${{ steps.prepare.outputs.tag_version }}-386 \
               --arch=386 \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-amd64 \
               --arch=amd64 \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-armv5  \
+              ${{ steps.prepare.outputs.tag_version }}-armv6  \
               --arch=arm  \
               --os=linux  \
-              --variant=v5 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --variant=v6 \
+              --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-armv7  \
               --arch=arm  \
               --os=linux  \
               --variant=v7 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-armv8  \
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-ppc64le \
               --arch=ppc64le  \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-s390x \
               --arch=s390x  \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest push ${{ steps.prepare.outputs.tag_version }}
 
@@ -220,7 +220,7 @@ jobs:
           docker manifest create -a ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-386          \
               ${{ steps.prepare.outputs.tag_latest }}-amd64        \
-              ${{ steps.prepare.outputs.tag_latest }}-armv5        \
+              ${{ steps.prepare.outputs.tag_latest }}-armv6        \
               ${{ steps.prepare.outputs.tag_latest }}-armv7        \
               ${{ steps.prepare.outputs.tag_latest }}-armv8        \
               ${{ steps.prepare.outputs.tag_latest }}-ppc64le      \
@@ -230,45 +230,45 @@ jobs:
               ${{ steps.prepare.outputs.tag_latest }}-386 \
               --arch=386 \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-amd64 \
               --arch=amd64 \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-armv5  \
+              ${{ steps.prepare.outputs.tag_latest }}-armv6  \
               --arch=arm  \
               --os=linux  \
-              --variant=v5 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --variant=v6 \
+              --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-armv7  \
               --arch=arm  \
               --os=linux  \
               --variant=v7 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-armv8  \
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-ppc64le \
               --arch=ppc64le  \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-s390x \
               --arch=s390x  \
               --os=linux  \
-              --os-version=openjdk:11.0.3-jre-slim
+              --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest push ${{ steps.prepare.outputs.tag_latest }}

@@ -1,19 +1,20 @@
 # [Docker_Buildx_Danmuji](https://hub.docker.com/r/zzcabc/danmuji) <-点击跳转DockerHub
 
-####  [本测试版本](https://hub.docker.com/r/zzcabc/danmuji-code) <- 点击跳转本项目测试DockerHub 
 
+####  [本测试版本](https://hub.docker.com/r/zzcabc/danmuji-code) <- 点击跳转本项目测试DockerHub 
 
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/BanqiJane/Bilibili_Danmuji?label=danmuji&style=flat-square)](https://github.com/BanqiJane/Bilibili_Danmuji/releases/latest) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zzcabc/danmuji?label=DockerHub&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated)
 
+
 ### 如果你发现上面图标版本不一致，请点击一下star，这样会触发自动构建镜像，即使你之后取消star
 
 
-本项目使用Docker Buildx构建全平台镜像，支持linux/386、linux/amd64、linux/armv5、linux/armv7、linux/armv8、linux/ppc64le、linux/s390x框架，并使用openjdk:11.0.3-jre-slim作为底包
+本项目使用Docker Buildx构建全平台镜像，支持linux/386、linux/amd64、linux/armv6、linux/armv7、linux/armv8、linux/ppc64le、linux/s390x框架，并使用openjdk:8u212-jre-alpine3.9作为底包
 
-**别问为什么使用jdk11,因为armv7的底包太难找了,使用jre为底包是因为Java运行仅需jre,可以减小体积**
 
 [测试版本](https://hub.docker.com/r/zzcabc/danmuji-code)采用openjdk:8u181-jre-slim作为底包
+
 
 测试版本将不会进行平台测试，也就是说测试版本出问题别找我
 
