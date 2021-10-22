@@ -30,7 +30,6 @@ docker run -d \
     --name danmuji \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
-    -v 本机路径:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -42,8 +41,6 @@ docker run -d \
 此说明对应Docker容器内
 
 JAVA_OPTS="-Xms64m -Xmx128m"           限制内存(**可能无效果**)
-
-/danmuji/DanmujiProfile                弹幕姬配置文件(**如果无特殊需求，不要映射**)
 
 /danmuji/Danmuji_log                   弹幕姬保存弹幕文件夹
 
