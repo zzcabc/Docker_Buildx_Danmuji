@@ -120,7 +120,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.code
-          platforms: linux/arm32/v7
+          platforms: linux/arm/v7
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
           tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
