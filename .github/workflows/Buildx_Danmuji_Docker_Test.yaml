@@ -35,9 +35,10 @@ jobs:
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
           DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji-code/tags" | awk '{print $644;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
+          zzcabc/danmuji-code:11111
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
           echo ::set-output name=image_name::${IMAGE_NAME}
-          echo ::set-output name=build_args::${VERSION}
+          echo ::set-output name=github_version::${VERSION}
           echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
@@ -89,7 +90,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/386
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-386,${{ steps.prepare.outputs.tag_latest }}-386
       # 构建 Amd64 框架镜像
       - name: Build linux/amd64
@@ -100,7 +101,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/amd64
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64   
       # 构建 armv6 框架镜像
       - name: Build linux/arm/v6
@@ -111,7 +112,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/arm/v6
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-armv6,${{ steps.prepare.outputs.tag_latest }}-armv6
       # 构建 Armv7 框架镜像
       - name: Build linux/arm/v7
@@ -122,7 +123,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/arm/v7
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
       # 构建 Armv8 框架镜像
       - name: Build linux/arm/v8
@@ -133,7 +134,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/arm64
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
       # 构建 ppc64le 框架镜像
       - name: Build linux/ppc64le
@@ -144,7 +145,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/ppc64le
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-ppc64le,${{ steps.prepare.outputs.tag_latest }}-ppc64le
       # 构建 s390x 框架镜像
       - name: Build linux/s390x
@@ -155,7 +156,7 @@ jobs:
           file: ./Dockerfile.code
           platforms: linux/s390x
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-s390x,${{ steps.prepare.outputs.tag_latest }}-s390x
       #创建并推送多架构镜像
       - name: Create and push manifest lists
@@ -191,7 +192,7 @@ jobs:
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-arm32v7  \
-              --arch=arm32  \
+              --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
@@ -248,7 +249,7 @@ jobs:
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-arm32v7  \
-              --arch=arm32  \
+              --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
