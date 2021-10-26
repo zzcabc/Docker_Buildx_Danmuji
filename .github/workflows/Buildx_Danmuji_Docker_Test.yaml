@@ -120,10 +120,10 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.code
-          platforms: linux/arm/v7
+          platforms: linux/arm32/v7
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-armv7,${{ steps.prepare.outputs.tag_latest }}-armv7
+          tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
       # 构建 Armv8 框架镜像
       - name: Build linux/arm/v8
         if: "contains(github.event.head_commit.message, 'test')"
@@ -134,7 +134,7 @@ jobs:
           platforms: linux/arm64
           push: true
           build-args: ${{ steps.prepare.outputs.build_args }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-armv8,${{ steps.prepare.outputs.tag_latest }}-armv8
+          tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
       # 构建 ppc64le 框架镜像
       - name: Build linux/ppc64le
         if: "contains(github.event.head_commit.message, 'test')"
@@ -165,8 +165,8 @@ jobs:
               ${{ steps.prepare.outputs.tag_version }}-386          \
               ${{ steps.prepare.outputs.tag_version }}-amd64        \
               ${{ steps.prepare.outputs.tag_version }}-armv6        \
-              ${{ steps.prepare.outputs.tag_version }}-armv7        \
-              ${{ steps.prepare.outputs.tag_version }}-armv8        \
+              ${{ steps.prepare.outputs.tag_version }}-arm32v7        \
+              ${{ steps.prepare.outputs.tag_version }}-arm64v8        \
               ${{ steps.prepare.outputs.tag_version }}-ppc64le      \
               ${{ steps.prepare.outputs.tag_version }}-s390x        
           
@@ -190,14 +190,14 @@ jobs:
               --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-armv7  \
-              --arch=arm  \
+              ${{ steps.prepare.outputs.tag_version }}-arm32v7  \
+              --arch=arm32  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-armv8  \
+              ${{ steps.prepare.outputs.tag_version }}-arm64v8  \
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
@@ -222,8 +222,8 @@ jobs:
               ${{ steps.prepare.outputs.tag_latest }}-386          \
               ${{ steps.prepare.outputs.tag_latest }}-amd64        \
               ${{ steps.prepare.outputs.tag_latest }}-armv6        \
-              ${{ steps.prepare.outputs.tag_latest }}-armv7        \
-              ${{ steps.prepare.outputs.tag_latest }}-armv8        \
+              ${{ steps.prepare.outputs.tag_latest }}-arm32v7        \
+              ${{ steps.prepare.outputs.tag_latest }}-arm64v8        \
               ${{ steps.prepare.outputs.tag_latest }}-ppc64le      \
               ${{ steps.prepare.outputs.tag_latest }}-s390x        
           
@@ -247,14 +247,14 @@ jobs:
               --os-version=openjdk:8u212-jre-alpine3.9
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-armv7  \
-              --arch=arm  \
+              ${{ steps.prepare.outputs.tag_latest }}-arm32v7  \
+              --arch=arm32  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-armv8  \
+              ${{ steps.prepare.outputs.tag_latest }}-arm64v8  \
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
