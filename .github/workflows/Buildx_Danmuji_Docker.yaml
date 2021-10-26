@@ -36,42 +36,41 @@ jobs:
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
           echo ::set-output name=image_name::${IMAGE_NAME}
-          echo ::set-output name=build_args::${VERSION}
+          echo ::set-output name=github_version::${VERSION}
           echo ::set-output name=dockerhub_version::${DOCKERHUB_VERSION}
           echo ::set-output name=tag_version::${TAG_VERSION}
           echo ::set-output name=tag_latest::${TAG_LATEST}
       # 切换到主分支
       - name: Checkout
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: actions/checkout@main
 
       - name: Set up QEMU
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }} 
         uses: docker/setup-qemu-action@v1
 
         # 初始化Docker Buildx
       - name: Set up Docker Buildx
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/setup-buildx-action@v1
 
         # 登录到DockerHub
       - name: Login to DockerHub
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         # 初始化 JDK8 环境
       - name: Set up JDK 8
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: actions/setup-java@v2
         with:
           java-version: '8'
           distribution: 'adopt'
-      # Docker_Buildx_Danmuji/Docker_Buildx_Danmuji/Bilibili_Danmuji/build/libs/xxxxxxxxxxx
       # 使用Gradle编译构建同时命名danmuji.jar
       - name: Build with Gradle
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         run: |
           sudo apt-get install git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
@@ -81,84 +80,84 @@ jobs:
           sudo mv $(find build -type f -size +10M) ././danmuji.jar
       # 构建 386 框架镜像
       - name: Build linux/386
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/386
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-386,${{ steps.prepare.outputs.tag_latest }}-386
       # 构建 Amd64 框架镜像
       - name: Build linux/amd64
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64   
-      # 构建 armv6 框架镜像
+      # 构建 Armv6 框架镜像
       - name: Build linux/arm/v6
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/arm/v6
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-armv6,${{ steps.prepare.outputs.tag_latest }}-armv6
       # 构建 Armv7 框架镜像
       - name: Build linux/arm/v7
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/arm/v7
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
       # 构建 Armv8 框架镜像
       - name: Build linux/arm/v8
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/arm64
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
       # 构建 ppc64le 框架镜像
       - name: Build linux/ppc64le
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/ppc64le
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-ppc64le,${{ steps.prepare.outputs.tag_latest }}-ppc64le
       # 构建 s390x 框架镜像
       - name: Build linux/s390x
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/s390x
           push: true
-          build-args: ${{ steps.prepare.outputs.build_args }}
+          build-args: ${{ steps.prepare.outputs.github_version }}
           tags: ${{ steps.prepare.outputs.tag_version }}-s390x,${{ steps.prepare.outputs.tag_latest }}-s390x
       #创建并推送多架构镜像
       - name: Create and push manifest lists
-        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.build_args }}
+        if: ${{ steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         run: |
           docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-386          \
@@ -190,7 +189,7 @@ jobs:
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
               ${{ steps.prepare.outputs.tag_version }}-arm32v7  \
-              --arch=arm32  \
+              --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
@@ -247,7 +246,7 @@ jobs:
           
           docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
               ${{ steps.prepare.outputs.tag_latest }}-arm32v7  \
-              --arch=arm32  \
+              --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
