@@ -13,7 +13,7 @@
 本项目使用Docker Buildx构建全平台镜像，支持linux/386、linux/amd64、linux/armv6、linux/armv7、linux/armv8、linux/ppc64le、linux/s390x框架，并使用openjdk:8u212-jre-alpine3.9作为底包
 
 
-[测试版本](https://hub.docker.com/r/zzcabc/danmuji-code)采用openjdk:8u181-jre-slim作为底包
+[测试版本](https://hub.docker.com/r/zzcabc/danmuji-code)采用openjdk:8u212-jre-alpine3.9作为底包
 
 
 测试版本将不会进行平台测试，也就是说测试版本出问题别找我
