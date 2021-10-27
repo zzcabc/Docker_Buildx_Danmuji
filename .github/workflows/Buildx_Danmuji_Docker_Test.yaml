@@ -31,7 +31,7 @@ jobs:
         # TAG_VERSION ： 标签版本
         # TAG_LATEST ： 最新版本
         run: |
-          IMAGE_NAME=danmuji-code
+          IMAGE_NAME=danmuji-test
           VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
           DOCKERHUB_VERSION=$(curl -sX GET "https://hub.docker.com/v2/repositories/zzcabc/danmuji-code/tags" | awk '{print $644;exit}' FS='[""]')
           TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
@@ -90,7 +90,7 @@ jobs:
           platforms: linux/386
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-386,${{ steps.prepare.outputs.tag_latest }}-386
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 Amd64 框架镜像
       - name: Build linux/amd64
         if: "contains(github.event.head_commit.message, 'test')"
@@ -101,7 +101,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-amd64,${{ steps.prepare.outputs.tag_latest }}-amd64   
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 armv6 框架镜像
       - name: Build linux/arm/v6
         if: "contains(github.event.head_commit.message, 'test')"
@@ -112,7 +112,7 @@ jobs:
           platforms: linux/arm/v6
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-armv6,${{ steps.prepare.outputs.tag_latest }}-armv6
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 Armv7 框架镜像
       - name: Build linux/arm/v7
         if: "contains(github.event.head_commit.message, 'test')"
@@ -123,7 +123,7 @@ jobs:
           platforms: linux/arm/v7
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-arm32v7,${{ steps.prepare.outputs.tag_latest }}-arm32v7
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 Armv8 框架镜像
       - name: Build linux/arm/v8
         if: "contains(github.event.head_commit.message, 'test')"
@@ -134,7 +134,7 @@ jobs:
           platforms: linux/arm64
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-arm64v8,${{ steps.prepare.outputs.tag_latest }}-arm64v8
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 ppc64le 框架镜像
       - name: Build linux/ppc64le
         if: "contains(github.event.head_commit.message, 'test')"
@@ -145,7 +145,7 @@ jobs:
           platforms: linux/ppc64le
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-ppc64le,${{ steps.prepare.outputs.tag_latest }}-ppc64le
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       # 构建 s390x 框架镜像
       - name: Build linux/s390x
         if: "contains(github.event.head_commit.message, 'test')"
@@ -156,61 +156,47 @@ jobs:
           platforms: linux/s390x
           push: true
           build-args: ${{ steps.prepare.outputs.github_version }}
-          tags: ${{ steps.prepare.outputs.tag_version }}-s390x,${{ steps.prepare.outputs.tag_latest }}-s390x
+          tags: ${{ steps.prepare.outputs.tag_version }},${{ steps.prepare.outputs.tag_latest }}
       #创建并推送多架构镜像
       - name: Create and push manifest lists
         if: "contains(github.event.head_commit.message, 'test')"
         run: |
-          docker manifest create -a ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-386          \
-              ${{ steps.prepare.outputs.tag_version }}-amd64        \
-              ${{ steps.prepare.outputs.tag_version }}-armv6        \
-              ${{ steps.prepare.outputs.tag_version }}-arm32v7        \
-              ${{ steps.prepare.outputs.tag_version }}-arm64v8        \
-              ${{ steps.prepare.outputs.tag_version }}-ppc64le      \
-              ${{ steps.prepare.outputs.tag_version }}-s390x        
+          docker manifest create -a ${{ steps.prepare.outputs.tag_version }}   
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}  \
-              ${{ steps.prepare.outputs.tag_version }}-386 \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=386 \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-amd64 \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=amd64 \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-armv6  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=arm  \
               --os=linux  \
               --variant=v6 \
               --os-version=openjdk:8u212-jre-alpine3.9
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-arm32v7  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-arm64v8  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-ppc64le \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=ppc64le  \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_version }} \
-              ${{ steps.prepare.outputs.tag_version }}-s390x \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_version }}
               --arch=s390x  \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
@@ -218,56 +204,42 @@ jobs:
           docker manifest push ${{ steps.prepare.outputs.tag_version }}
 
           
-          docker manifest create -a ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-386          \
-              ${{ steps.prepare.outputs.tag_latest }}-amd64        \
-              ${{ steps.prepare.outputs.tag_latest }}-armv6        \
-              ${{ steps.prepare.outputs.tag_latest }}-arm32v7        \
-              ${{ steps.prepare.outputs.tag_latest }}-arm64v8        \
-              ${{ steps.prepare.outputs.tag_latest }}-ppc64le      \
-              ${{ steps.prepare.outputs.tag_latest }}-s390x        
+          docker manifest create -a ${{ steps.prepare.outputs.tag_latest }}
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}  \
-              ${{ steps.prepare.outputs.tag_latest }}-386 \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=386 \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-amd64 \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=amd64 \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-armv6  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=arm  \
               --os=linux  \
               --variant=v6 \
               --os-version=openjdk:8u212-jre-alpine3.9
           
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-arm32v7  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=arm  \
               --os=linux  \
               --variant=v7 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-arm64v8  \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=arm64  \
               --os=linux  \
               --variant=v8 \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-ppc64le \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=ppc64le  \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
 
-          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }} \
-              ${{ steps.prepare.outputs.tag_latest }}-s390x \
+          docker manifest annotate ${{ steps.prepare.outputs.tag_latest }}
               --arch=s390x  \
               --os=linux  \
               --os-version=openjdk:8u212-jre-alpine3.9
