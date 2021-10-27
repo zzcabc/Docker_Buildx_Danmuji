@@ -24,7 +24,7 @@
 
 [B站用户西凉君君提供的Docker镜像地址](https://registry.hub.docker.com/r/xilianghe/danmuji)
 
-**使用方式**
+# 使用方式
 
 ```sh
 docker run -d \
@@ -37,7 +37,7 @@ docker run -d \
     zzcabc/danmuji:latest
 ```
 
-**映射路径说明** 
+# 映射路径说明
 
 此说明对应Docker容器内
 
@@ -49,11 +49,10 @@ JAVA_OPTS="-Xms64m -Xmx128m"           限制内存(**可能无效果**)
 
 /danmuji/log                           弹幕姬日志文件夹(非必须映射)
 
+
 ### ~~注意：本项目会拉取releases最新的danmuji.zip构建镜像,因包内名称为BiliBili_Danmuji-版本号beta.jar,如上游发生变化，则无法成功构建镜像~~
 
-
-
-## TODO
+# TODO
 
 - [x] 添加判断，如果releases的版本与DockerHub的版本一致，则不重新构建镜像
 
