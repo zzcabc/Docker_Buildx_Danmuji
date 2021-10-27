@@ -80,7 +80,7 @@ jobs:
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ././danmuji.jar
       # 构建并推送
-      - name: Build linux/386
+      - name: Build and Push
         if: "contains(github.event.head_commit.message, 'test')"
         uses: docker/build-push-action@v2
         with:

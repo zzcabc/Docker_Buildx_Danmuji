@@ -1,7 +1,7 @@
 # [Docker_Buildx_Danmuji](https://hub.docker.com/r/zzcabc/danmuji) <-点击跳转DockerHub
 
 
-####  [本测试版本](https://hub.docker.com/r/zzcabc/danmuji-code) <- 点击跳转本项目测试DockerHub 
+####  [本测试版本](https://hub.docker.com/r/zzcabc/danmuji-test) <- 点击跳转本项目测试DockerHub 
 
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/BanqiJane/Bilibili_Danmuji?label=danmuji&style=flat-square)](https://github.com/BanqiJane/Bilibili_Danmuji/releases/latest) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zzcabc/danmuji?label=DockerHub&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated)
@@ -13,7 +13,7 @@
 本项目使用Docker Buildx构建全平台镜像，支持linux/386、linux/amd64、linux/armv6、linux/armv7、linux/armv8、linux/ppc64le、linux/s390x框架，并使用openjdk:8u212-jre-alpine3.9作为底包
 
 
-[测试版本](https://hub.docker.com/r/zzcabc/danmuji-code)采用openjdk:8u212-jre-alpine3.9作为底包
+[测试版本](https://hub.docker.com/r/zzcabc/danmuji-test)采用openjdk:8u212-jre-alpine3.9作为底包
 
 
 测试版本将不会进行平台测试，也就是说测试版本出问题别找我
