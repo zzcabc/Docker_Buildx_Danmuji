@@ -21,6 +21,7 @@
 ```sh
 docker run -d \
     --name danmuji \
+    --dns=223.5.5.5 \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -v 本机路径:/danmuji/Danmuji_log \
@@ -29,11 +30,21 @@ docker run -d \
     zzcabc/danmuji:latest
 ```
 
+或者，你也可以使用
+```sh
+docker run -d \
+    --name danmuji \
+    -p 本机端口:23333 \
+    zzcabc/danmuji:latest
+```
+
+
 ### 阿里镜像仓库(将在2.4.8之后版本启用)
 
 ```sh
 docker run -d \
     --name danmuji \
+    --dns=223.5.5.5 \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -v 本机路径:/danmuji/Danmuji_log \
@@ -41,18 +52,30 @@ docker run -d \
     -v 本机路径:/danmuji/log \
     registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:latest
 ```
+# 更新容器方式
+
+## 方案一——手动更新
+
+ - 停止并删除容器
+ - 拉取最新的镜像
+ - 启动容器
+
+## 方案二——自动更新
+ 
+ - 使用 Watchtower 镜像，具体方式请百度
 
 # 映射路径说明
 
 此说明对应Docker容器内
-
-JAVA_OPTS="-Xms64m -Xmx128m"           限制内存(**可能无效果**)
-
-/danmuji/Danmuji_log                   弹幕姬保存弹幕文件夹
-
-/danmuji/guardFile                     弹幕姬上舰私信文件夹(非必须映射)
-
-/danmuji/log                           弹幕姬日志文件夹(非必须映射)
+| Docker运行参数 | 说明 |  
+| --- | --- |
+| `run -d` | 后台的方式保持运行 |
+| `--name danmuji` | 设置Docker容器名称为danmuji(非必要设置) |
+| `--dns=223.5.5.5` | Docker容器使用阿里DNS |
+| `JAVA_OPTS="-Xms64m -Xmx128m"` | 限制内存(**可能无效果**) |
+| `/danmuji/Danmuji_log` | 弹幕姬保存弹幕文件夹(非必须映射) |
+| `/danmuji/guardFile` | 弹幕姬上舰私信文件夹(非必须映射) |
+| `/danmuji/log` | 弹幕姬日志文件夹(非必须映射) |
 
 
 ### ~~注意：本项目会拉取releases最新的danmuji.zip构建镜像,因包内名称为BiliBili_Danmuji-版本号beta.jar,如上游发生变化，则无法成功构建镜像~~
