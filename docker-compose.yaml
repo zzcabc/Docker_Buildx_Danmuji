@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  danmuji:
+    #如果下面的镜像拉取不到可以试试用这个
+    #image: registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:latest
+    image: zzcabc/danmuji
+    container_name: danmuji
+    restart: always
+    privileged: true
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: "-Xms64m -Xmx128m"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #   web服务端口
+    ports:
+      - "23333:23333"
+    volumes:
+      - /home/test/danmuji/Danmuji_log:/danmuji/Danmuji_log
+      - /home/test/danmuji/guardFile:/danmuji/guardFile
+      - /home/test/danmuji/log:/danmuji/log
+    logging:
+      driver: json-file
+      options:
+        max-size: "1g"
+        max-file: "2"
