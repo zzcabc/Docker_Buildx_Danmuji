@@ -18,9 +18,9 @@ services:
     ports:
       - "23333:23333"
     volumes:
-      - /home/test/danmuji/Danmuji_log:/danmuji/Danmuji_log
-      - /home/test/danmuji/guardFile:/danmuji/guardFile
-      - /home/test/danmuji/log:/danmuji/log
+      - /danmuji/Danmuji_log:/danmuji/Danmuji_log
+      - /danmuji/guardFile:/danmuji/guardFile
+      - /danmuji/log:/danmuji/log
     logging:
       driver: json-file
       options:
