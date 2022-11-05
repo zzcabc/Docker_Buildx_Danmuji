@@ -1,0 +1,15 @@
+FROM openjdk:8u322-jre-slim-bullseye
+WORKDIR /danmuji
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apt update && apt install unzip wget curl -y \
+    && wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start.sh \
+    && chmod +x start.sh \
+    && mkdir Danmuji_log && mkdir guardFile && mkdir log \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*    
+EXPOSE 23333
+ENV GITHUB_PROXY="https://ghproxy.com/"
+ENV JAVA_OPTS=""
+ENV JAVA_OPTS2=""
+ENTRYPOINT ["./start.sh"]

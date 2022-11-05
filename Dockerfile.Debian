@@ -1,0 +1,13 @@
+FROM openjdk:8u322-jre-slim-bullseye
+WORKDIR /danmuji
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && mkdir Danmuji_log && mkdir guardFile && mkdir log \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*    
+COPY Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
+EXPOSE 23333
+ENV JAVA_OPTS=""
+ENV JAVA_OPTS2=""
+ENTRYPOINT ["sh","-c","java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}"]
