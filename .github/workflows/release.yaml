@@ -43,6 +43,16 @@ jobs:
           TAG_VERSION=$(cat version)
           echo "file_name=${FILE_NAME}" >> $GITHUB_OUTPUT
           echo "tag_version=${TAG_VERSION}" >> $GITHUB_OUTPUT
+
+          TAG=${{ github.event.inputs.releaseTag }}
+          if [ "${TAG}" = "v" ]
+          then TAG=${TAG_VERSION}
+          else TAG=${{ github.event.inputs.releaseTag }}
+          fi
+          echo "TAG=${TAG}" >> $GITHUB_OUTPUT
+
+          echo ${TAG}
+
       # 切换到主分支
       - name: Checkout
         uses: actions/checkout@main
@@ -64,7 +74,6 @@ jobs:
           sudo chmod +x lib/javastruct-0.1.jar
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ./
-          ls
 
       - name: Edit files
         run: |
@@ -98,6 +107,8 @@ jobs:
       # 压缩文件
       - name: Compressed Files
         run: |
+          export BUILD_DATE=$(date +"%Y-%m-%d")
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cp Bilibili_Danmuji/*.jar danmuji/
           cp Bilibili_Danmuji/*.jar danmuji-green/
           zip -r danmuji-green.zip danmuji-green/
@@ -106,13 +117,26 @@ jobs:
           rar a danmuji.rar danmuji/
           tar cvf danmuji.tar danmuji/
 
-      - name: Upload firmware to release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Upload firmware to release
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ github.event.inputs.releaseTag }}
+      #     files: |
+      #       danmuji.tar
+      #       danmuji-green.rar
+      #       danmuji-green.zip
+      #       danmuji.rar
+      #       danmuji.zip
+
+      - name: Upload Files To Release
+        uses: ncipollo/release-action@v1.8.0
         with:
-          tag_name: ${{ github.event.inputs.releaseTag }}
-          files: |
+          tag: ${{ steps.prepare.outputs.TAG }}
+          body: ${{ env.BUILD_DATE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: |
             danmuji.tar
             danmuji-green.rar
             danmuji-green.zip
