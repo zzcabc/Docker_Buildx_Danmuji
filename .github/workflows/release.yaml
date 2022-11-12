@@ -59,7 +59,6 @@ jobs:
         run: |
           sudo apt-get install -y git rar zip
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
-          mv CenterSetConf.java Bilibili_Danmuji/src/main/java/xyz/acproject/danmuji/conf
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo chmod +x lib/javastruct-0.1.jar
