@@ -35,36 +35,65 @@ jobs:
       - name: Prepare
         id: prepare
         # IMAGE_NAME ： 镜像名称
-        # VERSION ： 源码版本
+        # ALI_ADD ：阿里镜像地址
+        # GITHUB_VERSION ： 源码版本
         # DOCKERHUB_VERSION ： DockerHub 镜像版本
-        # TAG_VERSION ： 标签版本
-        # TAG_LATEST ： 最新版本
+        # TAG_VERSION ： 标签版本 zzcabc/danmuji:2.4.9
+        # TAG_LATEST ： 最新版本 zzcabc/pixivbiu-test:latest
+        # ALI_VERSION ： registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:2.4.9
+        # ALI_LATEST : registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:latest
+        # AUTO_UPDATE_TAG : zzcabc/danmuji:autoupdate
+        # AUTO_UPDATE_ALI : registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:autoupdate
         run: |
           IMAGE_NAME=danmuji-test
-          VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
+          ALI_ADD=registry.cn-hangzhou.aliyuncs.com
+          
+          GITHUB_VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
           DOCKERHUB_VERSION=$(cat currentVersion)
-          TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${VERSION}"
+          
+          TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${GITHUB_VERSION}"
           TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
+          
+          ALI_VERSION="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:${GITHUB_VERSION}"
+          ALI_LATEST="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:latest"
+
+          AUTO_UPDATE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:autoupdate"
+          AUTO_UPDATE_ALI="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:autoupdate"
+
+          echo "github_version=${GITHUB_VERSION}" >> $GITHUB_OUTPUT
+          echo "dockerhub_version=${DOCKERHUB_VERSION}" >> $GITHUB_OUTPUT
+
           echo "tag_version=${TAG_VERSION}" >> $GITHUB_OUTPUT
           echo "tag_latest=${TAG_LATEST}" >> $GITHUB_OUTPUT
-      
+        
+          echo "ali_version=${ALI_VERSION}" >> $GITHUB_OUTPUT
+          echo "ali_latest=${ALI_LATEST}" >> $GITHUB_OUTPUT
+
+          echo "auto_update_tag=${AUTO_UPDATE_TAG}" >> $GITHUB_OUTPUT
+          echo "auto_update_ali=${AUTO_UPDATE_ALI}" >> $GITHUB_OUTPUT
+
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
 
       # 初始化Docker Buildx
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       # 登录到DockerHub
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # # 登录到阿里镜像仓库
+      # - name: Login To Alibaba Cloud Container Registry
+      #   run: |
+      #     docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PWD }} registry.cn-hangzhou.aliyuncs.com
+
       # 初始化 JDK8 环境
       - name: Set up JDK 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '8'
           distribution: 'adopt'
@@ -72,28 +101,15 @@ jobs:
       # 使用Gradle编译构建同时命名danmuji.jar
       - name: Build with Gradle
         run: |
-          sudo apt-get install git
+          sudo apt-get install -y git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
-          sudo mv $(find build -type f -size +10M) ././danmuji.jar
+          sudo mv $(find build -type f -size +10M) ./danmuji.jar
 
       # 构建并推送
       - name: Build and Push
-        uses: docker/build-push-action@v2
-        with:
-          platforms:  linux/arm/v7
-          file: ./Dockerfile.Alpine
-          context: .
-          push: true
-          tags: |
-            ${{ steps.prepare.outputs.tag_latest }}-arm32
-            ${{ steps.prepare.outputs.tag_version }}-arm32
-
-      # 构建并推送
-      - name: Build and Push
-        if: ${{ github.event.inputs.Forced == 'true' }}
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
@@ -104,17 +120,55 @@ jobs:
             ${{ steps.prepare.outputs.tag_latest }}
             ${{ steps.prepare.outputs.tag_version }}
 
+     # 构建Arm32的镜像
+      # - name: Build and Push Arm32
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     platforms:  linux/arm/v7
+      #     file: ./Dockerfile.Alpine
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ${{ steps.prepare.outputs.tag_latest }}-arm32
+      #       ${{ steps.prepare.outputs.tag_version }}-arm32
+
+      # 自动更新的推送
+      # - name: Build and Push Auto Update
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     platforms: linux/amd64,linux/arm64/v8
+      #     file: ./Dockerfile.Update
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ${{ steps.prepare.outputs.auto_update_tag }}
+      #       ${{ steps.prepare.outputs.auto_update_ali }}
+
+      # 构建Amd64和Arm64的镜像
+      # - name: Build and Push Amd64 and Arm64
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     platforms: linux/amd64,linux/arm64/v8
+      #     file: ./Dockerfile.Debian
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ${{ steps.prepare.outputs.tag_version }}
+      #       ${{ steps.prepare.outputs.tag_latest }}
+      #       ${{ steps.prepare.outputs.ali_version }}
+      #       ${{ steps.prepare.outputs.ali_latest }}
+            
       # 初始化版本号与git 
-      - name: commit
-        run: |
-          echo "${{ steps.prepare.outputs.github_version }}" > currentVersion
-          git config --global user.name zhaocheng
-          git config --global user.email zhaocheng990105@gmail.com
-          git add currentVersion
-          git commit -m "当前版本是:${{ steps.prepare.outputs.github_version }}" -a
+      # - name: commit
+      #   run: |
+      #     echo "${{ steps.prepare.outputs.github_version }}" > currentVersion
+      #     git config --global user.name zhaocheng
+      #     git config --global user.email zhaocheng990105@gmail.com
+      #     git add currentVersion
+      #     git commit -m "当前版本是:${{ steps.prepare.outputs.github_version }}" -a
       
       # 推送版本号到GitHub 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.TOKEN_GITHUB }}

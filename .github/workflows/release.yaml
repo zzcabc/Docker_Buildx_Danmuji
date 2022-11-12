@@ -49,7 +49,7 @@ jobs:
 
       # 初始化 JDK8 环境
       - name: Set up JDK 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '8'
           distribution: 'adopt'
@@ -86,7 +86,7 @@ jobs:
           echo "该版本为window绿色版本，" > danmuji-green/readme.txt
           echo "运行方法：" >> danmuji-green/readme.txt
           echo "直接运行run.bat（window下）记得允许网络" >> danmuji-green/readme.txt
-          echo "其他系统或方法：解压完成 直接在本目录打开控制台 或者 控制台cd本目录命令执行jdk8u282-b08-jre\bin\java -jar -Xms64m -Xmx128m  BiliBili_Danmuji-${{ steps.prepare.outputs.tag_version }}.jar --server.port=23333 即可运行" >> danmuji-green/readme.txt
+          echo "其他系统或方法：解压完成 直接在本目录打开控制台 或者 控制台cd本目录命令执行openjdk-8-jre\bin\java -jar -Xms64m -Xmx128m  BiliBili_Danmuji-${{ steps.prepare.outputs.tag_version }}.jar --server.port=23333 即可运行" >> danmuji-green/readme.txt
           echo "--server.port=23333为端口 想修改端口可以修改run.bat里面的这个参数" >> danmuji-green/readme.txt
           echo "如何设置？打开浏览器地址栏输入 http://127.0.0.1:23333进行设置；" >> danmuji-green/readme.txt
           echo "如何退出？直接关闭命令行窗口即可退出" >> danmuji-green/readme.txt
@@ -95,7 +95,7 @@ jobs:
 
           echo "@echo off" > danmuji-green/run.bat
           echo "title BiliBili_Danmuji-${{ steps.prepare.outputs.tag_version }}-%date%-%time%-%cd%" >> danmuji-green/run.bat
-          echo "jdk8u282-b08-jre\bin\java -jar -Xms64m -Xmx128m BiliBili_Danmuji-${{ steps.prepare.outputs.tag_version }}.jar --server.port=23333" >> danmuji-green/run.bat
+          echo "openjdk-8-jre\bin\java -jar -Xms64m -Xmx128m BiliBili_Danmuji-${{ steps.prepare.outputs.tag_version }}.jar --server.port=23333" >> danmuji-green/run.bat
       # 压缩文件
       - name: Compressed Files
         run: |
