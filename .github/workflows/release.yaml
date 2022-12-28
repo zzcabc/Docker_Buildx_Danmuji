@@ -50,7 +50,7 @@ jobs:
           else TAG=${{ github.event.inputs.releaseTag }}
           fi
           echo "TAG=v${TAG}" >> $GITHUB_OUTPUT
-          echo "TAG=弹幕姬发行版${TAG_VERSION}(含绿色版本)"
+          echo "TAG=弹幕姬发行版${TAG_VERSION}(含绿色版本)" >> $GITHUB_OUTPUT
 
           echo $FILE_NAME
           echo $TAG
@@ -79,7 +79,7 @@ jobs:
 
       - name: Download OpenJDK8 Archive
         run: |
-          wget -O- https://github.com/zzcabc/Docker_Buildx_Danmuji/releases/download/openjdk-8-jre/openjdk-8-jre.zip
+          wget https://github.com/zzcabc/Docker_Buildx_Danmuji/releases/download/openjdk-8-jre/openjdk-8-jre.zip
           unzip openjdk-8-jre.zip -d openjdk-8-jre
 
       - name: Create File Folders Edit Files
