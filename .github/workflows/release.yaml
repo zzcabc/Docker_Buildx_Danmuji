@@ -44,16 +44,11 @@ jobs:
           echo "file_name=${FILE_NAME}" >> $GITHUB_OUTPUT
           echo "tag_version=${TAG_VERSION}" >> $GITHUB_OUTPUT
 
-          TAG=${{ github.event.inputs.releaseTag }}
-          if [ "${TAG}" = "v" ]
-          then TAG=${TAG_VERSION}
-          else TAG=${{ github.event.inputs.releaseTag }}
-          fi
-          echo "TAG=v${TAG}" >> $GITHUB_OUTPUT
-          echo "TAG=弹幕姬发行版${TAG_VERSION}(含绿色版本)" >> $GITHUB_OUTPUT
+          TAG = 弹幕姬发行版${TAG_VERSION}(含绿色版本)
+          echo "TAG=${TAG}" >> $GITHUB_OUTPUT
 
-          echo $FILE_NAME
-          echo $TAG
+          echo ${FILE_NAME}
+          echo ${TAG}
 
       # 切换到主分支
       - name: Checkout
@@ -130,12 +125,19 @@ jobs:
           rar a danmuji.rar danmuji/
           tar cvf danmuji.tar danmuji/
 
-      - name: Upload Files To Release
-        uses: ncipollo/release-action@main
+      # - name: Upload Files To Release
+      #   uses: ncipollo/release-action@main
+      #   with:
+      #     tag: ${{ steps.prepare.outputs.TAG }}
+      #     allowUpdates: true
+      #     replacesArtifacts: true
+      #     body: ${{ env.BUILD_DATE }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     artifacts: danmuji.tar,danmuji-green.rar,danmuji-green.zip,danmuji.rar,danmuji.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ steps.prepare.outputs.TAG }}
-          allowUpdates: true
-          replacesArtifacts: true
-          body: ${{ env.BUILD_DATE }}
+          name: ${{ steps.prepare.outputs.TAG }}
+          tag_name: ${{ steps.prepare.outputs.tag_version }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: danmuji.tar,danmuji-green.rar,danmuji-green.zip,danmuji.rar,danmuji.zip
+          files: danmuji.tar,danmuji-green.rar,danmuji-green.zip,danmuji.rar,danmuji.zip
