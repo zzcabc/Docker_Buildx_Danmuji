@@ -50,6 +50,7 @@ jobs:
           else TAG=${{ github.event.inputs.releaseTag }}
           fi
           echo "TAG=v${TAG}" >> $GITHUB_OUTPUT
+          echo "TAG=弹幕姬发行版${TAG_VERSION}(含绿色版本)"
 
           echo $FILE_NAME
           echo $TAG
