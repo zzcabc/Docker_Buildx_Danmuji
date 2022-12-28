@@ -8,18 +8,18 @@ on:
         description: 'Forced' 
         required: true
         default: 'true'
-  # master分支的push操作会触发当前脚本的执行
-  # push:
-  #   branches: [ main ]
-  # master分支的pr操作会触发当前脚本的执行
+  # main分支的push操作会触发当前脚本的执行
+  push:
+    branches: [ main ]
+  # main分支的pr操作会触发当前脚本的执行
 #  pull_request:
-#    branches: [ master ]
+#    branches: [ main ]
   # 定时任务,分时日月年,为国际标准时间16点,对应中国时间0点
-#  schedule:
-#    - cron: '0 16 * * *'
-  # 点击star时开始任务
-#  watch:
-#    types: started
+  # schedule:
+  #   - cron: '0 16 * * *'
+  # # 点击star时开始任务
+  # watch:
+  #   types: started
 
 
 jobs:
@@ -72,6 +72,9 @@ jobs:
           echo "auto_update_tag=${AUTO_UPDATE_TAG}" >> $GITHUB_OUTPUT
           echo "auto_update_ali=${AUTO_UPDATE_ALI}" >> $GITHUB_OUTPUT
 
+          echo $GITHUB_VERSION
+          echo $DOCKERHUB_VERSION
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -86,7 +89,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # # 登录到阿里镜像仓库
+      # 登录到阿里镜像仓库
       # - name: Login To Alibaba Cloud Container Registry
       #   run: |
       #     docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PWD }} registry.cn-hangzhou.aliyuncs.com
@@ -107,18 +110,6 @@ jobs:
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ./danmuji.jar
-
-      # 构建并推送
-      - name: Build and Push
-        uses: docker/build-push-action@v2
-        with:
-          platforms: linux/amd64,linux/arm64
-          file: ./Dockerfile.test
-          context: .
-          push: true
-          tags: |
-            ${{ steps.prepare.outputs.tag_latest }}
-            ${{ steps.prepare.outputs.tag_version }}
 
      # 构建Arm32的镜像
       # - name: Build and Push Arm32
@@ -145,18 +136,16 @@ jobs:
       #       ${{ steps.prepare.outputs.auto_update_ali }}
 
       # 构建Amd64和Arm64的镜像
-      # - name: Build and Push Amd64 and Arm64
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     platforms: linux/amd64,linux/arm64/v8
-      #     file: ./Dockerfile.Debian
-      #     context: .
-      #     push: true
-      #     tags: |
-      #       ${{ steps.prepare.outputs.tag_version }}
-      #       ${{ steps.prepare.outputs.tag_latest }}
-      #       ${{ steps.prepare.outputs.ali_version }}
-      #       ${{ steps.prepare.outputs.ali_latest }}
+      - name: Build and Push Amd64 and Arm64
+        uses: docker/build-push-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64/v8
+          file: ./Dockerfile.test
+          context: .
+          push: true
+          tags: |
+            ${{ steps.prepare.outputs.tag_version }}
+            ${{ steps.prepare.outputs.tag_latest }}
             
       # 初始化版本号与git 
       # - name: commit

@@ -72,6 +72,9 @@ jobs:
           echo "auto_update_tag=${AUTO_UPDATE_TAG}" >> $GITHUB_OUTPUT
           echo "auto_update_ali=${AUTO_UPDATE_ALI}" >> $GITHUB_OUTPUT
 
+          echo $GITHUB_VERSION
+          echo $DOCKERHUB_VERSION
+
       - name: Set up QEMU
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/setup-qemu-action@v2
