@@ -166,6 +166,7 @@ jobs:
           git config --global user.name zhaocheng
           git config --global user.email zhaocheng990105@gmail.com
           git add currentVersion
+          sed -i 's/${{ steps.prepare.outputs.dockerhub_version }}/${{ steps.prepare.outputs.github_version }}/g' README.md
           git commit -m "当前版本是:${{ steps.prepare.outputs.github_version }}" -a
       
       # 推送版本号到GitHub 
