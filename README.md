@@ -25,9 +25,9 @@
 
 如果你想拉取armv7的镜像，请使用 zzcabc/danmuji:latest-arm32 进行拉取
 
-或者使用 zzcabc/danmuji:2.6.0-arm32 拉取指定版本
+或者使用 zzcabc/danmuji:2.5.0-arm32 拉取指定版本
 
-使用 zzcabc/danmuji:2.6.0 可以拉取arm64和amd64架构的镜像
+使用 zzcabc/danmuji:2.5.0 可以拉取arm64和amd64架构的镜像
 
 ```
 
@@ -39,7 +39,7 @@ docker run -d \
     --dns=223.5.5.5 \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
-    -e JAVA_OPTS2="" (将在2.5.0版本之后启用，具体看映射配置说明的表格)  \
+    -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -55,7 +55,7 @@ docker run -d \
     zzcabc/danmuji
 ```
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.6.0`**
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.5.0`**
 
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
 
@@ -67,7 +67,7 @@ releases下载使用国内的免费服务，可能说不定就挂了
 
 当版本更新的时候，你只需要使用 `docker restart danmuji` 即可完成更新操作
 
-**在2.5.0版本之后(不包括2.5.0)，你可以指定代理服务商了**
+**已经启用，你可以指定代理服务商了**
 **不指定默认为GitHub官方源，目前可以用`https://ghproxy.com/`，记得后面有斜杠**
 
 **注意：只要免费服务不炸,就可以更新**
@@ -79,9 +79,9 @@ docker run -d \
     --name danmuji \
     --dns=223.5.5.5 \
     -p 本机端口:23333 \
-    -e GITHUB_PROXY="https://ghproxy.com/" (将在2.5.0版本之后启用，自定义GitHub代理域名) \
+    -e GITHUB_PROXY="https://ghproxy.com/" (已经启用启用，自定义GitHub代理域名) \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
-    -e JAVA_OPTS2="" (将在2.5.0版本之后启用，具体看映射配置说明的表格)  \
+    -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -179,7 +179,7 @@ docker run -d \
 | `--name danmuji` | 设置Docker容器名称为danmuji(非必要设置) |
 | `--dns=223.5.5.5` | Docker容器使用阿里DNS |
 | `JAVA_OPTS="-Xms64m -Xmx128m -Duser.timezone=GMT+08"` | Java的基础配置，比如现在内存使用，设置Java时区等 |
-| `JAVA_OPTS2="Java配置的参数"` | 如果你对Java比较熟悉可以配置该参数(将在2.5.0版本之后启用) |
+| `JAVA_OPTS2="Java配置的参数"` | 如果你对Java比较熟悉可以配置该参数(已经启用) |
 | `/danmuji/Danmuji_log` | 弹幕姬保存弹幕文件夹(非必须映射) |
 | `/danmuji/guardFile` | 弹幕姬上舰私信文件夹(非必须映射) |
 | `/danmuji/log` | 弹幕姬日志文件夹(非必须映射) |
