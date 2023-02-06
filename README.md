@@ -2,11 +2,11 @@
 
 [Dockerhub](https://hub.docker.com/r/zzcabc/danmuji) | [Github](https://github.com/zzcabc/Docker_Buildx_Danmuji)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/BanqiJane/Bilibili_Danmuji?label=danmuji&style=flat-square)](https://github.com/BanqiJane/Bilibili_Danmuji/releases/latest) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zzcabc/danmuji?label=DockerHub&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated)[![Docker Pulls](https://img.shields.io/docker/pulls/zzcabc/danmuji?style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/BanqiJane/Bilibili_Danmuji?label=danmuji&style=flat-square)](https://github.com/BanqiJane/Bilibili_Danmuji/releases/latest) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zzcabc/danmuji?label=DockerHub&style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji/tags?page=1&ordering=last_updated) [![Docker Pulls](https://img.shields.io/docker/pulls/zzcabc/danmuji?style=flat-square)](https://hub.docker.com/r/zzcabc/danmuji)
 
 ### 如果你发现上面图标版本不一致，请前往Github点击一下star，这样会触发自动构建镜像，即使你之后取消star
 
-本项目使用Docker Buildx构建全平台镜像，支持`linux/amd64`、`linux/armv7`、`linux/armv8`、~~`linux/386`、`linux/armv6`、`linux/ppc64le`、`linux/s390x`~~框架
+本项目使用Docker Buildx构建全平台镜像，支持`linux/amd64`、`linux/armv7`、`linux/armv8`、不在支持`linux/386`、`linux/armv6`、`linux/ppc64le`、`linux/s390x`框架
 
 |dockerfile|架构|底包采用|Amd64镜像大小|
 |:--:|:--:|:--:|:--:|
@@ -150,7 +150,7 @@ docker run -d \
     --dns=223.5.5.5 \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
-    -e JAVA_OPTS2="" (将在2.6.1版本之后启用，具体看映射配置说明的表格)  \
+    -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
