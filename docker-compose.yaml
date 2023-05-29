@@ -2,7 +2,7 @@ version: "3" # 根据你的docker-compose进行修改
 services:
   danmuji:
     # 阿里镜像地址
-    #image: registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:latest
+    # image: registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:latest
     # dockerhub镜像地址
     image: zzcabc/danmuji
     # 容器名称
@@ -16,10 +16,9 @@ services:
     environment:
       TZ: Asia/Shanghai
       JAVA_OPTS: "-Xms64m -Xmx128m"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    # “:”前面可自由更改，“:”后面为固定路径
+      # 如果你了解Java的运行逻辑    java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
+      JAVA_OPTS2: "" 
+    # “:”前面是本机地址可自由更改，“:”后面为容器内固定路径
     # web服务端口
     ports:
       - "23333:23333"
