@@ -1,4 +1,4 @@
-FROM openjdk:8u322-jre-slim-bullseye
+FROM openjdk:8-jre-slim-bullseye
 WORKDIR /danmuji
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
