@@ -123,9 +123,8 @@ docker run -d \
     environment:
       TZ: Asia/Shanghai
       JAVA_OPTS: "-Xms64m -Xmx128m"
-    build:
-      context: .
-      dockerfile: Dockerfile
+      # java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
+      JAVA_OPTS2: ""
     ports:
       - "23333:23333" # 变更端口
     volumes:
