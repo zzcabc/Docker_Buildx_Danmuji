@@ -1,8 +1,5 @@
 FROM alpine:latest
 WORKDIR /danmuji
-# RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-#     && echo "Asia/Shanghai" > /etc/timezone \
-#     && mkdir -p /opt/java/jdk \
 RUN apk add -U --no-cache tzdata && \
     apt update && apt install unzip wget curl -y && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
