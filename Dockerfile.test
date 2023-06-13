@@ -1,14 +1,13 @@
 FROM alpine:latest
 WORKDIR /danmuji
 RUN apk add -U --no-cache tzdata && \
-    apk update && apt install unzip wget curl -y && \
+    apk update && apk install unzip wget curl -y && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo 'Asia/Shanghai' >/etc/timezone && \
     mkdir -p jdk && \
     wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start-test.sh && \ 
     chmod +x start-test.sh && \
     mkdir Danmuji_log && mkdir guardFile && mkdir log && \
-    rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 EXPOSE 23333
 ENV JAVA_OPTS=""
