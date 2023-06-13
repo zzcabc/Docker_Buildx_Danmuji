@@ -1,7 +1,9 @@
-FROM openjdk:8-jre-slim-bullseye
+FROM alpine:latest
 WORKDIR /danmuji
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
+    && mkdir -p /opt/java/jdk \
+    && export PATH="/opt/java/jdk/bin:$PATH" \
     && apt update && apt install unzip wget curl -y \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start.sh \
