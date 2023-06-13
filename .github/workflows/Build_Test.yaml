@@ -166,9 +166,6 @@ jobs:
       # 测试docker image
       - name: Test docker image
         run: |
-          docker run -d \
-            - p 23333:23333 \
-            - v /opt/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64:/danmuji/jdk \ 
-            ${{ steps.prepare.outputs.tag_version }}
+          docker run -d - p 23333:23333 - v /opt/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64:/danmuji/jdk ${{ steps.prepare.outputs.tag_version }}
 
           curl http://127.0.0.1:23333
