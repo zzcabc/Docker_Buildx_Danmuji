@@ -7,7 +7,7 @@ RUN apk add -U --no-cache tzdata && \
     apt update && apt install unzip wget curl -y && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo 'Asia/Shanghai' >/etc/timezone && \
-    mkdir -p /opt/java/jdk && \
+    mkdir -p /opt/java/openjdk && \
     wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start-test.sh && \ 
     chmod +x start-test.sh && \
     mkdir Danmuji_log && mkdir guardFile && mkdir log && \
