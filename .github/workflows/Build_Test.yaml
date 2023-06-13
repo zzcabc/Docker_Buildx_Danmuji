@@ -105,8 +105,6 @@ jobs:
       - name: Build with Gradle
         run: |
           java -version
-          where java
-
           sudo apt-get install -y git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
           cd Bilibili_Danmuji
@@ -164,3 +162,13 @@ jobs:
       #   uses: ad-m/github-push-action@master
       #   with:
       #     github_token: ${{ secrets.TOKEN_GITHUB }}
+
+      # 测试docker image
+      - name: Test docker image
+        run: |
+          docker run -d \
+            - p 23333:23333 \
+            - v /opt/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64:/opt/java/jdk \ 
+            ${{ steps.prepare.outputs.tag_version }}
+
+          curl http://127.0.0.1:23333

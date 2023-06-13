@@ -3,14 +3,13 @@ WORKDIR /danmuji
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && mkdir -p /opt/java/jdk \
-    && export PATH="/opt/java/jdk/bin:$PATH" \
     && apt update && apt install unzip wget curl -y \
     && dpkg-reconfigure --frontend noninteractive tzdata \
-    && wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start.sh \
-    && chmod +x start.sh \
+    && wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start-test.sh \
+    && chmod +x start-test.sh \
     && mkdir Danmuji_log && mkdir guardFile && mkdir log \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*    
 EXPOSE 23333
 ENV JAVA_OPTS=""
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["./start-test.sh"]
