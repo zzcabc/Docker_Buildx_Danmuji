@@ -48,7 +48,7 @@ if [ -f "/danmuji/new" ];then
         echo "Update completed"
     fi
 fi
-export PATH="/opt/java/jdk/bin:$PATH"
+export PATH="/danmuji/jdk/bin:$PATH"
 echo "java -version"
 java -version
 
