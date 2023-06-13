@@ -5,7 +5,6 @@ WORKDIR /danmuji
 #     && mkdir -p /opt/java/jdk \
 RUN mkdir -p /opt/java/jdk \
     && apt update && apt install unzip wget curl -y \
-    && dpkg-reconfigure --frontend noninteractive tzdata \
     && wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start-test.sh \
     && chmod +x start-test.sh \
     && mkdir Danmuji_log && mkdir guardFile && mkdir log \
