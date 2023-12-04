@@ -25,9 +25,9 @@
 
 如果你想拉取armv7的镜像，请使用 zzcabc/danmuji:latest-arm32 进行拉取
 
-或者使用 zzcabc/danmuji:2.6.5-arm32 拉取指定版本
+或者使用 zzcabc/danmuji:2.7.0.0-arm32 拉取指定版本
 
-使用 zzcabc/danmuji:2.6.5 可以拉取arm64和amd64架构的镜像
+使用 zzcabc/danmuji:2.7.0.0 可以拉取arm64和amd64架构的镜像
 
 ```
 
@@ -55,7 +55,7 @@ docker run -d \
     zzcabc/danmuji
 ```
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.6.5`**
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.0`**
 
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
 
