@@ -1,13 +1,13 @@
-FROM alpine:latest
+FROM eclipse-temurin:8-jre-jammy
 WORKDIR /danmuji
-RUN apk add -U --no-cache tzdata unzip wget curl && \
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo 'Asia/Shanghai' >/etc/timezone && \
-    mkdir -p jdk && \
-    wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/start-test.sh && \ 
-    chmod +x start-test.sh && \
-    mkdir Danmuji_log && mkdir guardFile && mkdir log && \
-    rm -rf /tmp/*
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && mkdir Danmuji_log && mkdir guardFile && mkdir log \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*    
+COPY Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
 EXPOSE 23333
 ENV JAVA_OPTS=""
-ENTRYPOINT ["./start-test.sh"]
+ENV JAVA_OPTS2=""
+ENTRYPOINT ["sh","-c","java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}"]
