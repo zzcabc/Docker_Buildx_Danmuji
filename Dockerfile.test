@@ -5,8 +5,7 @@ WORKDIR /danmuji
 # 设置时区并安装必要的软件包
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends su-exec \
+    && apt-get update su-exec \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
