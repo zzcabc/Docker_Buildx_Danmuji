@@ -141,7 +141,7 @@ jobs:
       - name: Build and Push Amd64 and Arm64
         uses: docker/build-push-action@v3
         with:
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
           file: ./Dockerfile.test
           context: .
           push: true
