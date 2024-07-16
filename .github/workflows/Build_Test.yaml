@@ -107,6 +107,7 @@ jobs:
           java -version
           sudo apt-get install -y git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
+          cp ./gradle-wrapper.properties gradle/wrapper/gradle-wrapper.properties
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
