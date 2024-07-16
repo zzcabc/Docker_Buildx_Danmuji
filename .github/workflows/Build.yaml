@@ -117,18 +117,18 @@ jobs:
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ./danmuji.jar
 
-     # 构建Arm32的镜像
-      - name: Build and Push Arm32
-        if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-        uses: docker/build-push-action@v3
-        with:
-          platforms:  linux/arm/v7
-          file: ./Dockerfile.Alpine
-          context: .
-          push: true
-          tags: |
-            ${{ steps.prepare.outputs.tag_latest }}-arm32
-            ${{ steps.prepare.outputs.tag_version }}-arm32
+    #  # 构建Arm32的镜像
+    #   - name: Build and Push Arm32
+    #     if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
+    #     uses: docker/build-push-action@v3
+    #     with:
+    #       platforms:  linux/arm/v7
+    #       file: ./Dockerfile.Alpine
+    #       context: .
+    #       push: true
+    #       tags: |
+    #         ${{ steps.prepare.outputs.tag_latest }}-arm32
+    #         ${{ steps.prepare.outputs.tag_version }}-arm32
 
       # 自动更新的推送
       - name: Build and Push Auto Update
@@ -148,8 +148,8 @@ jobs:
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
         uses: docker/build-push-action@v3
         with:
-          platforms: linux/amd64,linux/arm64/v8
-          file: ./Dockerfile.Debian
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          file: ./Dockerfile.Ubuntu
           context: .
           push: true
           tags: |
