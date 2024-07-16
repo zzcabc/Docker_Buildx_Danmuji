@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim-bullseye
+FROM eclipse-temurin:8u412-b08-jre
 
 WORKDIR /danmuji
 
