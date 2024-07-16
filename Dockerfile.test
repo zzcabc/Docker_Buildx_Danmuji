@@ -3,9 +3,17 @@ FROM openjdk:8-jre-slim-bullseye
 WORKDIR /danmuji
 
 # 设置时区并安装必要的软件包
-RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+RUN apt update && apt install -y --no-install-recommends unzip wget curl git build-essential \
+    && git clone https://github.com/ncopa/su-exec.git /tmp/su-exec \
+    && cd /tmp/su-exec \
+    && make \
+    && cp su-exec /usr/local/bin/su-exec \
+    && chmod +x /usr/local/bin/su-exec \
+    && rm -rf /tmp/su-exec \
+    && apt-get purge -y --auto-remove git build-essential \
+    && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && apt-get update su-exec \
+    && apt-get install -y --no-install-recommends tzdata \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
