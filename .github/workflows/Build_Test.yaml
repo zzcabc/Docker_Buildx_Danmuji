@@ -101,16 +101,16 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
-      # # 使用Gradle编译构建同时命名danmuji.jar
-      # - name: Build with Gradle
-      #   run: |
-      #     java -version
-      #     sudo apt-get install -y git
-      #     git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
-      #     cd Bilibili_Danmuji
-      #     sudo chmod +x ./gradlew
-      #     sudo ./gradlew build -x test
-      #     sudo mv $(find build -type f -size +10M) ./danmuji.jar
+      # 使用Gradle编译构建同时命名danmuji.jar
+      - name: Build with Gradle
+        run: |
+          java -version
+          sudo apt-get install -y git
+          git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
+          cd Bilibili_Danmuji
+          sudo chmod +x ./gradlew
+          sudo ./gradlew build -x test
+          sudo mv $(find build -type f -size +10M) ./danmuji.jar
 
      # 构建Arm32的镜像
       # - name: Build and Push Arm32
