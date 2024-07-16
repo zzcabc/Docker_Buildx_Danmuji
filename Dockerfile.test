@@ -1,13 +1,28 @@
-FROM eclipse-temurin:8-jre-jammy
+FROM openjdk:8-jre-slim-bullseye
+
 WORKDIR /danmuji
+
+# 设置时区并安装必要的软件包
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends su-exec \
     && dpkg-reconfigure --frontend noninteractive tzdata \
-    && mkdir Danmuji_log && mkdir guardFile && mkdir log \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/*    
+    && rm -rf /var/lib/apt/lists/* /tmp/*
+
+# 复制应用程序和入口脚本
 COPY Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# 确保入口脚本可执行
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# 暴露应用程序端口
 EXPOSE 23333
+
+# 设置环境变量
 ENV JAVA_OPTS=""
 ENV JAVA_OPTS2=""
-ENTRYPOINT ["sh","-c","java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}"]
+
+# 设置入口点
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
