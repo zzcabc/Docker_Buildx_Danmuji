@@ -8,14 +8,14 @@
 
 本项目使用Docker Buildx构建全平台镜像，支持`linux/amd64`、`linux/armv7`、`linux/armv8`、不在支持`linux/386`、`linux/armv6`、`linux/ppc64le`、`linux/s390x`框架
 
-### 在弹幕姬v2.7.0.1 采用openjdk版本 
+### 在弹幕姬v2.7.0.2 采用openjdk版本 
 |dockerfile|架构|底包采用|Amd64镜像大小|
 |:--:|:--:|:--:|:--:|
 |Alpine|arm32|openjdk:8u212-jre-alpine3.9|110M|
 |Debian|amd64,arm64|8u322-jre-slim-bullseye|221M|
 |Update|amd64,arm64|8u322-jre-slim-bullseye|221M|
 
-### 在弹幕姬v2.7.0.1 采用eclipse-temurin版本
+### 在弹幕姬v2.7.0.2 采用eclipse-temurin版本
 |dockerfile|架构|底包采用|Amd64镜像大小|
 |:--:|:--:|:--:|:--:|
 |Ubuntu|amd64,arm64|8u412-b08-jre|256M|
@@ -30,16 +30,16 @@
 ```
 当前已经取消linux/386、linux/armv6、linux/ppc64le、linux/s390x的镜像构建
 
-在2.7.0.1版本之后 amd64，arm64，arm32将合并
+在2.7.0.2版本之后 amd64，arm64，arm32将合并
 
 如果你想拉取armv7的镜像，请使用 zzcabc/danmuji:latest-arm32 进行拉取
 
-或者使用 zzcabc/danmuji:2.7.0.1-arm32 拉取指定版本
+或者使用 zzcabc/danmuji:2.7.0.2-arm32 拉取指定版本
 
-使用 zzcabc/danmuji:2.7.0.1 可以拉取arm64和amd64架构的镜像
+使用 zzcabc/danmuji:2.7.0.2 可以拉取arm64和amd64架构的镜像
 
 ```
-# 在2.7.0.1版本之后 amd64，arm64，arm32将合并
+# 在2.7.0.2版本之后 amd64，arm64，arm32将合并
 
 ## DockerHub镜像(无自动更新 将`zzcabc/danmuji`改为`registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji`即可使用阿里镜像仓库,如果你是armv7的,需要改为`zzcabc/danmuji:latest-arm32`)
 
@@ -65,7 +65,7 @@ docker run -d \
     zzcabc/danmuji
 ```
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.1`**
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.2`**
 
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
 
