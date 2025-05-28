@@ -141,7 +141,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.prepare.outputs.auto_update_tag }}
-            ${{ steps.prepare.outputs.auto_update_ali }}
+            # ${{ steps.prepare.outputs.auto_update_ali }}
 
       # 构建Amd64和Arm64的镜像
       - name: Build and Push Amd64 and Arm64
