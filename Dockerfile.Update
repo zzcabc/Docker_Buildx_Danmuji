@@ -9,6 +9,7 @@ RUN apt update && apt install -y --no-install-recommends unzip wget curl git bui
     && make \
     && cp su-exec /usr/local/bin/su-exec \
     && chmod +x /usr/local/bin/su-exec \
+    && cd /danmuji \
     && rm -rf /tmp/su-exec \
     && apt-get purge -y --auto-remove git build-essential \
     && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
