@@ -8,18 +8,11 @@
 
 本项目使用Docker Buildx构建全平台镜像，支持`linux/amd64`、`linux/armv7`、`linux/armv8`、不在支持`linux/386`、`linux/armv6`、`linux/ppc64le`、`linux/s390x`框架
 
-### 在弹幕姬v2.7.0.2 采用openjdk版本 
+### 统一使用eclipse-temurin版本
 |dockerfile|架构|底包采用|Amd64镜像大小|
 |:--:|:--:|:--:|:--:|
-|Alpine|arm32|openjdk:8u212-jre-alpine3.9|110M|
-|Debian|amd64,arm64|8u322-jre-slim-bullseye|221M|
-|Update|amd64,arm64|8u322-jre-slim-bullseye|221M|
-
-### 在弹幕姬v2.7.0.2 采用eclipse-temurin版本
-|dockerfile|架构|底包采用|Amd64镜像大小|
-|:--:|:--:|:--:|:--:|
-|Ubuntu|amd64,arm64|8u412-b08-jre|256M|
-|Update|amd64,arm64|8u322-jre-slim-bullseye|221M|
+|Ubuntu|amd64,arm64,arm32|8u412-b08-jre|256M|
+|Update|amd64,arm64,arm32|8u412-b08-jre|221M|
 
 使用GitHub Action中国时间 **0:00** 自动拉取[BanqiJane/Bilibili_Danmuji](https://github.com/BanqiJane/Bilibili_Danmuji)的源码进行构建Docker镜像，**但当源码版本和Docker镜像版本一致将不会构建镜像**，由源码构建时间大概6分钟
 
@@ -32,16 +25,15 @@
 
 在2.7.0.2版本之后 amd64，arm64，arm32将合并
 
-如果你想拉取armv7的镜像，请使用 zzcabc/danmuji:latest-arm32 进行拉取
-
-或者使用 zzcabc/danmuji:2.7.0.2-arm32 拉取指定版本
-
-使用 zzcabc/danmuji:2.7.0.2 可以拉取arm64和amd64架构的镜像
+使用 zzcabc/danmuji:2.7.0.2 可以拉取指定版本的镜像
 
 ```
 # 在2.7.0.2版本之后 amd64，arm64，arm32将合并
 
-## DockerHub镜像(无自动更新 将`zzcabc/danmuji`改为`registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji`即可使用阿里镜像仓库,如果你是armv7的,需要改为`zzcabc/danmuji:latest-arm32`)
+
+## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像
+
+## DockerHub镜像(无自动更新)
 
 ```sh
 docker run -d \
@@ -81,8 +73,6 @@ releases下载使用国内的免费服务，可能说不定就挂了
 **不指定默认为`https://ghproxy.com/`，记得后面有斜杠**
 
 **注意：只要免费服务不炸,就可以更新**
-
-将`zzcabc/danmuji:autoupdate`改成`registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:autoupdate` 即可使用阿里镜像仓库
 
 ```sh
 docker run -d \

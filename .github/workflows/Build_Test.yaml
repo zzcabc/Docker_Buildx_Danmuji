@@ -104,10 +104,8 @@ jobs:
       # 使用Gradle编译构建同时命名danmuji.jar
       - name: Build with Gradle
         run: |
-          java -version
           sudo apt-get install -y git
           git clone https://github.com/BanqiJane/Bilibili_Danmuji.git
-          cp ./gradle-wrapper.properties Bilibili_Danmuji/gradle/wrapper/gradle-wrapper.properties
           cd Bilibili_Danmuji
           sudo chmod +x ./gradlew
           sudo ./gradlew build -x test
