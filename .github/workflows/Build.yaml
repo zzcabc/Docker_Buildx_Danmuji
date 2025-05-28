@@ -141,7 +141,6 @@ jobs:
           push: true
           tags: |
             ${{ steps.prepare.outputs.auto_update_tag }}
-            # ${{ steps.prepare.outputs.auto_update_ali }}
 
       # 构建Amd64和Arm64的镜像
       - name: Build and Push Amd64 and Arm64
@@ -155,8 +154,6 @@ jobs:
           tags: |
             ${{ steps.prepare.outputs.tag_version }}
             ${{ steps.prepare.outputs.tag_latest }}
-            # ${{ steps.prepare.outputs.ali_version }}
-            # ${{ steps.prepare.outputs.ali_latest }}
             
       # 初始化版本号与git 
       - name: commit
