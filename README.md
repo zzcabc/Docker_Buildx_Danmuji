@@ -23,12 +23,12 @@
 ```
 当前已经取消linux/386、linux/armv6、linux/ppc64le、linux/s390x的镜像构建
 
-在2.7.0.3版本之后 amd64，arm64，arm32将合并
+在2.7.0.4版本之后 amd64，arm64，arm32将合并
 
-使用 zzcabc/danmuji:2.7.0.3 可以拉取指定版本的镜像
+使用 zzcabc/danmuji:2.7.0.4 可以拉取指定版本的镜像
 
 ```
-# 在2.7.0.3版本之后 amd64，arm64，arm32将合并
+# 在2.7.0.4版本之后 amd64，arm64，arm32将合并
 
 
 ## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像
@@ -57,7 +57,7 @@ docker run -d \
     zzcabc/danmuji
 ```
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.3`**
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.4`**
 
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
 
