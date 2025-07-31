@@ -106,13 +106,17 @@ docker run -d \
 可能因为CDN的原因无法获取
 
 `wget https://cdn.jsdelivr.net/gh/zzcabc/Docker_Buildx_Danmuji@main/docker-compose.yaml`
+
 `wget https://cdn.jsdelivr.net/gh/zzcabc/Docker_Buildx_Danmuji@main/docker-compose-v2.yaml`
 
 之后通过nano或者vim命令修改docker-compose.yaml
 
 docker compose 目前有两个版本 具体自己搜索
+
 V1 是 Python 写的
+
 V2 是 Go 写的
+
 把`docker-compose up -d` 改成 `docker compose up -d` 即可
 
 |docker compose|V1|V2|
