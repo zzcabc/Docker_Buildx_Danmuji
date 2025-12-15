@@ -18,11 +18,8 @@ RUN apt update && apt install -y --no-install-recommends unzip wget curl git bui
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # 复制应用程序和入口脚本
-COPY Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-# 确保入口脚本可执行
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY --chmod=755 Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 # 暴露应用程序端口
 EXPOSE 23333
