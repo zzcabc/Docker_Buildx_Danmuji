@@ -17,15 +17,18 @@ RUN apt-get update && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&  \
     echo "Asia/Shanghai" > /etc/timezone && \
     rm -rf /var/lib/apt/lists/* && \
-    apt-get clean && \
-    wget https://raw.githubusercontent.com/zzcabc/Docker_Buildx_Danmuji/main/entrypoint.auto.sh && \
-    mv entrypoint.auto.sh entrypoint.sh && \
-    chmod 0777 entrypoint.sh
+    apt-get clean
 
+# 复制应用程序和入口脚本
+COPY --chmod=755 Bilibili_Danmuji/danmuji.jar /danmuji/danmuji.jar
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
+# 暴露应用程序端口
 EXPOSE 23333
 
-ENV GITHUB_PROXY="https://ghproxy.com/"
+# 设置环境变量
 ENV JAVA_OPTS=""
 ENV JAVA_OPTS2=""
 
-ENTRYPOINT ["./entrypoint.sh"]
+# 设置入口点
+ENTRYPOINT ["/entrypoint.sh"]

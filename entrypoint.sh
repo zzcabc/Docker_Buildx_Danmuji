@@ -71,7 +71,6 @@ echo "环境变量检查:"
 echo "  JAVA_OPTS: ${JAVA_OPTS:-未设置}"
 echo "  JAVA_OPTS2: ${JAVA_OPTS2:-未设置}"
 echo "  CONFIG_FILE: ${CONFIG_FILE}"
-echo "  WORKDIR: ${WORKDIR}"
 
 # 设置locale（Ubuntu需要）
 export LANG=${LANG:-C.UTF-8}
