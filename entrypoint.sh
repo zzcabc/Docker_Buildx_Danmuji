@@ -32,4 +32,4 @@ chown -R ${PUID}:${PGID} ${DANMUJI_LOG} ${GUARDFILE} ${LOG}
 chmod -R 755 ${DANMUJI_LOG} ${GUARDFILE} ${LOG}
 echo "Set permissions for ${DANMUJI_LOG} ${GUARDFILE} ${LOG}"
 
-exec sudo -u "#$PUID" -g "#$PGID" java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
+exec su-exec -u "#$PUID" -g "#$PGID" java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
