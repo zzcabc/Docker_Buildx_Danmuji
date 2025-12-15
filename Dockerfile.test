@@ -29,4 +29,4 @@ ENV JAVA_OPTS=""
 ENV JAVA_OPTS2=""
 
 # 设置入口点
-ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
