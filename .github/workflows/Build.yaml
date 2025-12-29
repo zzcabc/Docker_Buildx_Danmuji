@@ -34,7 +34,6 @@ jobs:
 
       - name: Prepare
         id: prepare
-        if: ${{ github.event.inputs.Forced != 'true' }}
         # IMAGE_NAME ： 镜像名称
         # ALI_ADD ：阿里镜像地址
         # GITHUB_VERSION ： 源码版本
@@ -46,52 +45,69 @@ jobs:
         # AUTO_UPDATE_TAG : zzcabc/danmuji:autoupdate
         # AUTO_UPDATE_ALI : registry.cn-hangzhou.aliyuncs.com/zzcabc/danmuji:autoupdate
         run: |
-          IMAGE_NAME=danmuji
-          ALI_ADD=registry.cn-hangzhou.aliyuncs.com
-          
           GITHUB_VERSION=$(curl -sX GET "https://api.github.com/repos/BanqiJane/Bilibili_Danmuji/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
           DOCKERHUB_VERSION=$(cat currentVersion)
+          echo "github_version=$GITHUB_VERSION" >> $GITHUB_OUTPUT
+          echo "dockerhub_version=$DOCKERHUB_VERSION" >> $GITHUB_OUTPUT
+
+          IMAGE_NAME=danmuji
+          DOCKERHUB_NAME_SPACE="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
           
-          TAG_VERSION="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:${GITHUB_VERSION}"
-          TAG_LATEST="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest"
+          TAG_VERSION="$DOCKERHUB_NAME_SPACE:${GITHUB_VERSION}"
+          TAG_LATEST="$DOCKERHUB_NAME_SPACE:latest"
+          AUTO_UPDATE_TAG="$DOCKERHUB_NAME_SPACE:autoupdate"
+          echo "TAG_VERSION=$TAG_VERSION" >> $GITHUB_OUTPUT
+          echo "TAG_LATEST=$TAG_LATEST" >> $GITHUB_OUTPUT
+          echo "AUTO_UPDATE_TAG=$AUTO_UPDATE_TAG" >> $GITHUB_OUTPUT
+
+
+          echo "DockerHub: $TAG_VERSION $TAG_LATEST $AUTO_UPDATE_TAG"
           
+
+          GHCR_ADD=ghcr.io
+          GHCR_NAME_SPACE="${{ github.repository_owner }}/$IMAGE_NAME"
+          GHCR_VERSION="${GHCR_ADD}/$GHCR_NAME_SPACE:${GITHUB_VERSION}"
+          GHCR_LATEST="${GHCR_ADD}/$GHCR_NAME_SPACE:latest"
+          GHCR_AUTO_UPDATE="${GHCR_ADD}/$GHCR_NAME_SPACE:autoupdate"
+          echo "GHCR_VERSION=$GHCR_VERSION" >> $GITHUB_OUTPUT
+          echo "GHCR_LATEST=$GHCR_LATEST" >> $GITHUB_OUTPUT
+          echo "GHCR_AUTO_UPDATE=$GHCR_AUTO_UPDATE" >> $GITHUB_OUTPUT
+
+          echo "GHCR: $GHCR_VERSION $GHCR_LATEST $GHCR_AUTO_UPDATE"
+
+          ALI_ADD=registry.cn-hangzhou.aliyuncs.com
           ALI_VERSION="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:${GITHUB_VERSION}"
           ALI_LATEST="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:latest"
-
-          AUTO_UPDATE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:autoupdate"
           AUTO_UPDATE_ALI="${ALI_ADD}/${{ secrets.ALIYUN_NAMESPACES }}/${IMAGE_NAME}:autoupdate"
+          echo "ALI_VERSION=$ALI_VERSION" >> $GITHUB_OUTPUT
+          echo "ALI_LATEST=$ALI_LATEST" >> $GITHUB_OUTPUT
 
-          echo "github_version=${GITHUB_VERSION}" >> $GITHUB_OUTPUT
-          echo "dockerhub_version=${DOCKERHUB_VERSION}" >> $GITHUB_OUTPUT
-
-          echo "tag_version=${TAG_VERSION}" >> $GITHUB_OUTPUT
-          echo "tag_latest=${TAG_LATEST}" >> $GITHUB_OUTPUT
-        
-          echo "ali_version=${ALI_VERSION}" >> $GITHUB_OUTPUT
-          echo "ali_latest=${ALI_LATEST}" >> $GITHUB_OUTPUT
-
-          echo "auto_update_tag=${AUTO_UPDATE_TAG}" >> $GITHUB_OUTPUT
-          echo "auto_update_ali=${AUTO_UPDATE_ALI}" >> $GITHUB_OUTPUT
-
-          echo $GITHUB_VERSION
-          echo $DOCKERHUB_VERSION
+          echo "github $GITHUB_VERSION dockerhub  $DOCKERHUB_VERSION"
 
       - name: Set up QEMU
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       # 初始化Docker Buildx
       - name: Set up Docker Buildx
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       # 登录到DockerHub
       - name: Login to DockerHub
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      # 登录到GitHub Container Registry
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN_GITHUB }}
 
       # 登录到阿里镜像仓库
       # - name: Login To Alibaba Cloud Container Registry
@@ -118,19 +134,6 @@ jobs:
           sudo ./gradlew build -x test
           sudo mv $(find build -type f -size +10M) ./danmuji.jar
 
-    #  # 构建Arm32的镜像
-    #   - name: Build and Push Arm32
-    #     if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-    #     uses: docker/build-push-action@v3
-    #     with:
-    #       platforms:  linux/arm/v7
-    #       file: ./Dockerfile.Alpine
-    #       context: .
-    #       push: true
-    #       tags: |
-    #         ${{ steps.prepare.outputs.tag_latest }}-arm32
-    #         ${{ steps.prepare.outputs.tag_version }}-arm32
-
       # 自动更新的推送
       - name: Build and Push Auto Update
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
@@ -141,21 +144,24 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.prepare.outputs.auto_update_tag }}
+            ${{ steps.prepare.outputs.AUTO_UPDATE_TAG }}
+            ${{ steps.prepare.outputs.GHCR_AUTO_UPDATE }}
 
       # 构建Amd64和Arm64的镜像
       - name: Build and Push Amd64 and Arm64
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          platforms: linux/amd64,linux/arm64/v8
           file: ./Dockerfile
           context: .
           push: true
           tags: |
-            ${{ steps.prepare.outputs.tag_version }}
-            ${{ steps.prepare.outputs.tag_latest }}
-            
+            ${{ steps.prepare.outputs.TAG_VERSION }}
+            ${{ steps.prepare.outputs.TAG_LATEST }}
+            ${{ steps.prepare.outputs.GHCR_VERSION }}
+            ${{ steps.prepare.outputs.GHCR_LATEST }}]
+    
       # 初始化版本号与git 
       - name: commit
         if: ${{ github.event.inputs.Forced == 'true' || steps.prepare.outputs.dockerhub_version != steps.prepare.outputs.github_version }}
