@@ -13,6 +13,8 @@ services:
     # 环境变量 TZ 设置时区为东八区
     # JAVA_OPTS 设置Java程序启动所需内存大小(可能无效果)
     environment:
+      PUID: 1000 # 自己改这两个
+      PGID: 1000 #
       TZ: Asia/Shanghai
       JAVA_OPTS: "-Xms64m -Xmx128m"
       # 如果你了解Java的运行逻辑    java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}

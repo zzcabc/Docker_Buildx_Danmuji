@@ -8,12 +8,6 @@
 
 本项目使用Docker Buildx构建全平台镜像，支持`linux/amd64`、`linux/armv7`、`linux/armv8`、不在支持`linux/386`、`linux/armv6`、`linux/ppc64le`、`linux/s390x`框架
 
-### 统一使用eclipse-temurin版本
-|dockerfile|架构|底包采用|Amd64镜像大小|
-|:--:|:--:|:--:|:--:|
-|Ubuntu|amd64,arm64,arm32|8u412-b08-jre|256M|
-|Update|amd64,arm64,arm32|8u412-b08-jre|221M|
-
 使用GitHub Action中国时间 **0:00** 自动拉取[BanqiJane/Bilibili_Danmuji](https://github.com/BanqiJane/Bilibili_Danmuji)的源码进行构建Docker镜像，**但当源码版本和Docker镜像版本一致将不会构建镜像**，由源码构建时间大概6分钟
 
 ~~[B站用户西凉君君提供的Docker镜像地址](https://registry.hub.docker.com/r/xilianghe/danmuji)~~
@@ -23,7 +17,7 @@
 ```
 当前已经取消linux/386、linux/armv6、linux/ppc64le、linux/s390x的镜像构建
 
-在2.7.0.5版本之后 amd64，arm64，arm32将合并
+在2.7.0.5版本之后 amd64，armv7，armv8将合并
 
 使用 zzcabc/danmuji:2.7.0.5 可以拉取指定版本的镜像
 
@@ -40,6 +34,8 @@ docker run -d \
     --name danmuji \
     --dns=223.5.5.5 \
     -p 本机端口:23333 \
+    -e PUID=${id -u} \
+    -e PGID=${id -g} \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
     -v 本机路径:/danmuji/Danmuji_log \
@@ -107,22 +103,9 @@ docker run -d \
 
 `wget https://cdn.jsdelivr.net/gh/zzcabc/Docker_Buildx_Danmuji@main/docker-compose.yaml`
 
-`wget https://cdn.jsdelivr.net/gh/zzcabc/Docker_Buildx_Danmuji@main/docker-compose-v2.yaml`
-
 之后通过nano或者vim命令修改docker-compose.yaml
 
-docker compose 目前有两个版本 具体自己搜索
-
-V1 是 Python 写的
-
-V2 是 Go 写的
-
-把`docker-compose up -d` 改成 `docker compose up -d` 即可
-
-|docker compose|V1|V2|
-|:--:|:--:|:--:|
-|docker-compose.yaml|`docker-compose up -d`|-|
-|docker-compose-v2.yaml|-|`docker compose up -d`|
+使用 `docker compose up -d` 即可
 
 你可以使用docker-compose启动多个容器
 
@@ -134,6 +117,8 @@ V2 是 Go 写的
     restart: always
     privileged: true
     environment:
+      PUID: 1000 # 自己改这两个
+      PGID: 1000 #
       TZ: Asia/Shanghai
       JAVA_OPTS: "-Xms64m -Xmx128m"
       # java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
