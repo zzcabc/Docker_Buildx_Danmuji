@@ -14,15 +14,17 @@
 
 # 使用方式
 
+**加入了PUID和PGID的环境变量，如果不指定默认已root账户运行**
+
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.5`**
+
 ```
 当前已经取消linux/386、linux/armv6、linux/ppc64le、linux/s390x的镜像构建
 
-在2.7.0.5版本之后 amd64，armv7，armv8将合并
+amd64，armv7，armv8已合并
 
 使用 zzcabc/danmuji:2.7.0.5 可以拉取指定版本的镜像
-
 ```
-**在2.7.0.5版本之后 amd64，arm64，arm32将合并**
 
 ## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像，也支持ghcr.io
 
@@ -54,8 +56,6 @@ docker run -d \
 
 ## Ghcr.io镜像(无自动更新)
 
-不指定PUID和PGID默认使用root账户
-
 ```sh
 docker run -d \
     --name danmuji \
@@ -80,17 +80,15 @@ docker run -d \
     ghcr.io/zzcabc/danmuji
 ```
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.5`**
-
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
 
+```
 容器采用获取官方的releases的danmuji.zip 解压并使用
 
-releases下载使用国内的免费服务，可能说不定就挂了
-
-但是可能无法正常更新版本，毕竟Github的网络条件你懂
+releases下载使用CDN，可能说不定就挂了，毕竟Github的网络条件你懂
 
 当版本更新的时候，你只需要使用 `docker restart danmuji` 即可完成更新操作
+```
 
 **已经启用，你可以指定代理服务商了**
 **不指定默认为`https://ghproxy.com/`，记得后面有斜杠**
@@ -167,16 +165,15 @@ docker run -d \
     image: zzcabc/danmuji
     container_name: danmuji # 变更容器名
     restart: always
-    privileged: true
     environment:
       PUID: 1000 # 自己改这两个
       PGID: 1000 #
       TZ: Asia/Shanghai
       JAVA_OPTS: "-Xms64m -Xmx128m"
-      # java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
       JAVA_OPTS2: ""
+# java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
     ports:
-      - "23333:23333" # 变更端口
+      - 23333:23333 # 变更端口
     volumes:
       - /danmuji/Danmuji_log:/danmuji/Danmuji_log
       - /danmuji/guardFile:/danmuji/guardFile
@@ -211,6 +208,7 @@ docker run -d \
 ## 方案一——手动更新
 
  - 停止并删除容器
+ - 删除当前镜像
  - 拉取最新的镜像
  - 启动容器
 
@@ -229,6 +227,7 @@ Watchtower 最新版存在docker api 兼容性问题，自行寻找替代方案
 | `run -d` | 后台的方式保持运行 |
 | `--name danmuji` | 设置Docker容器名称为danmuji(非必要设置) |
 | `--dns=223.5.5.5` | Docker容器使用阿里DNS |
+| `-e PUID=1000 -e PGID=1000` | 启动程序的用户|
 | `JAVA_OPTS="-Xms64m -Xmx128m -Duser.timezone=GMT+08"` | Java的基础配置，比如现在内存使用，设置Java时区等 |
 | `JAVA_OPTS2="Java配置的参数"` | 如果你对Java比较熟悉可以配置该参数(已经启用) |
 | `/danmuji/Danmuji_log` | 弹幕姬保存弹幕文件夹(非必须映射) |
