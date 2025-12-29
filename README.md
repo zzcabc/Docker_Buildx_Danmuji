@@ -22,10 +22,9 @@
 使用 zzcabc/danmuji:2.7.0.5 可以拉取指定版本的镜像
 
 ```
-# 在2.7.0.5版本之后 amd64，arm64，arm32将合并
+**在2.7.0.5版本之后 amd64，arm64，arm32将合并**
 
-
-## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像
+## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像，也支持ghcr.io
 
 ## DockerHub镜像(无自动更新)
 
@@ -53,6 +52,34 @@ docker run -d \
     zzcabc/danmuji
 ```
 
+## Ghcr.io镜像(无自动更新)
+
+不指定PUID和PGID默认使用root账户
+
+```sh
+docker run -d \
+    --name danmuji \
+    --dns=223.5.5.5 \
+    -p 本机端口:23333 \
+    -e PUID=${id -u} \
+    -e PGID=${id -g} \
+    -e JAVA_OPTS="-Xms64m -Xmx128m" \
+    -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v 本机路径:/danmuji/Danmuji_log \
+    -v 本机路径:/danmuji/guardFile \
+    -v 本机路径:/danmuji/log \
+    ghcr.io/zzcabc/danmuji
+```
+
+或者，你也可以使用
+
+```sh
+docker run -d \
+    --name danmuji \
+    -p 本机端口:23333 \
+    ghcr.io/zzcabc/danmuji
+```
+
 **默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.5`**
 
 ## DockerHub镜像(有自动更新 仅支持amd64和arm64)
@@ -69,6 +96,31 @@ releases下载使用国内的免费服务，可能说不定就挂了
 **不指定默认为`https://ghproxy.com/`，记得后面有斜杠**
 
 **注意：只要免费服务不炸,就可以更新**
+
+```sh
+docker run -d \
+    --name danmuji \
+    --dns=223.5.5.5 \
+    -p 本机端口:23333 \
+    -e GITHUB_PROXY="https://ghproxy.com/" (已经启用启用，自定义GitHub代理域名，默认为https://ghproxy.com/) \
+    -e JAVA_OPTS="-Xms64m -Xmx128m" \
+    -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v 本机路径:/danmuji/Danmuji_log \
+    -v 本机路径:/danmuji/guardFile \
+    -v 本机路径:/danmuji/log \
+    zzcabc/danmuji:autoupdate
+```
+
+或者，你也可以使用
+
+```sh
+docker run -d \
+    --name danmuji \
+    -p 本机端口:23333 \
+    zzcabc/danmuji:autoupdate
+```
+
+## Ghcr.io镜像(有自动更新)
 
 ```sh
 docker run -d \
@@ -166,6 +218,8 @@ docker run -d \
  
  - 使用 Watchtower 镜像，具体方式请百度
 
+Watchtower 最新版存在docker api 兼容性问题，自行寻找替代方案
+
 # 映射路径说明
 
 此说明对应Docker容器内
@@ -198,13 +252,3 @@ Docker容器内部运行命令 `java ${JAVA_OPTS} -jar danmuji.jar ${JAVA_OPTS2}
 比如使用`docker cp danmuji:/danmuji/DanmujiProfile /usr/DanmujiProfile` 即可将DanmujiProfile 复制到宿主机的/usr目录下
 
 使用`docker cp danmuji:/danmuji/set /usr/set` 即可将set文件夹内的所有东西 复制到宿主机的/usr/set目录下
-
-# TODO
-
-- [x] 添加判断，如果releases的版本与DockerHub的版本一致，则不重新构建镜像
-
-- [x] 每日定时构建镜像，当上有发布新版本最长也就时隔24小时更新
-
-- [x] 使用源码构建镜像，解决上述注意事项(但我不会！！！！)  上面三项同时解决
-
-- [x] 将镜像上传阿里镜像仓库
