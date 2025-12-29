@@ -159,8 +159,8 @@ jobs:
           tags: |
             ${{ steps.prepare.outputs.TAG_VERSION }}
             ${{ steps.prepare.outputs.TAG_LATEST }}
-            # ${{ steps.prepare.outputs.GHCR_VERSION }}
-            # ${{ steps.prepare.outputs.GHCR_LATEST }}]
+            ${{ steps.prepare.outputs.GHCR_VERSION }}
+            ${{ steps.prepare.outputs.GHCR_LATEST }}
     
       # 初始化版本号与git 
       - name: commit
