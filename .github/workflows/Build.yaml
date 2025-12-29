@@ -33,6 +33,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: Prepare
+        if: ${{ github.event.inputs.Forced != 'true'
         id: prepare
         # IMAGE_NAME ： 镜像名称
         # ALI_ADD ：阿里镜像地址
@@ -148,7 +149,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
-          file: ./Dockerfile.Ubuntu
+          file: ./Dockerfile
           context: .
           push: true
           tags: |
