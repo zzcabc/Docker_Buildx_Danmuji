@@ -39,6 +39,7 @@ docker run -d \
     -e PGID=${id -g} \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v  本机路径/DanmujiProfile:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -65,6 +66,7 @@ docker run -d \
     -e PGID=${id -g} \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v  本机路径/DanmujiProfile:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -103,6 +105,7 @@ docker run -d \
     -e GITHUB_PROXY="https://ghproxy.com/" (已经启用启用，自定义GitHub代理域名，默认为https://ghproxy.com/) \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v  本机路径/DanmujiProfile:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -128,6 +131,7 @@ docker run -d \
     -e GITHUB_PROXY="https://ghproxy.com/" (已经启用启用，自定义GitHub代理域名，默认为https://ghproxy.com/) \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v  本机路径/DanmujiProfile:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -175,9 +179,10 @@ docker run -d \
     ports:
       - 23333:23333 # 变更端口
     volumes:
-      - /danmuji/Danmuji_log:/danmuji/Danmuji_log
-      - /danmuji/guardFile:/danmuji/guardFile
-      - /danmuji/log:/danmuji/log
+      -  ./danmuji/DanmujiProfile:/danmuji/DanmujiProfile \
+      - ./danmuji/Danmuji_log:/danmuji/Danmuji_log
+      - ./danmuji/guardFile:/danmuji/guardFile
+      - ./danmuji/log:/danmuji/log
     logging:
       driver: json-file
       options:
@@ -197,6 +202,7 @@ docker run -d \
     -p 本机端口:23333 \
     -e JAVA_OPTS="-Xms64m -Xmx128m" \
     -e JAVA_OPTS2="" (已经启用，具体看映射配置说明的表格)  \
+    -v  本机路径/DanmujiProfile:/danmuji/DanmujiProfile \
     -v 本机路径:/danmuji/Danmuji_log \
     -v 本机路径:/danmuji/guardFile \
     -v 本机路径:/danmuji/log \
@@ -230,6 +236,7 @@ Watchtower 最新版存在docker api 兼容性问题，自行寻找替代方案
 | `-e PUID=1000 -e PGID=1000` | 启动程序的用户|
 | `JAVA_OPTS="-Xms64m -Xmx128m -Duser.timezone=GMT+08"` | Java的基础配置，比如现在内存使用，设置Java时区等 |
 | `JAVA_OPTS2="Java配置的参数"` | 如果你对Java比较熟悉可以配置该参数(已经启用) |
+|`/danmuji/DanmujiProfile`|弹幕姬保存cookie(文件类型，建议映射)|
 | `/danmuji/Danmuji_log` | 弹幕姬保存弹幕文件夹(非必须映射) |
 | `/danmuji/guardFile` | 弹幕姬上舰私信文件夹(非必须映射) |
 | `/danmuji/log` | 弹幕姬日志文件夹(非必须映射) |
