@@ -25,9 +25,10 @@ services:
       - 23333:23333
     # 映射文件夹(非必须)
     volumes:
-      - /danmuji/Danmuji_log:/danmuji/Danmuji_log
-      - /danmuji/guardFile:/danmuji/guardFile
-      - /danmuji/log:/danmuji/log
+      - ./danmuji/DanmujiProfile:/danmuji/DanmujiProfile \
+      - ./danmuji/Danmuji_log:/danmuji/Danmuji_log
+      - ./danmuji/guardFile:/danmuji/guardFile
+      - ./danmuji/log:/danmuji/log
     # 日志 日志大小1m 日志数量2个
     logging:
       driver: json-file
