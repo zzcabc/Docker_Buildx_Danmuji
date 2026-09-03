@@ -16,14 +16,14 @@
 
 **加入了PUID和PGID的环境变量，如果不指定默认已root账户运行**
 
-**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.6`**
+**默认拉取最新版的镜像，如果你想指定版本可以将`zzcabc/danmuji`改为`zzcabc/danmuji:2.7.0.7`**
 
 ```
 当前已经取消linux/386、linux/armv6、linux/ppc64le、linux/s390x的镜像构建
 
 amd64，armv7，armv8已合并
 
-使用 zzcabc/danmuji:2.7.0.6 可以拉取指定版本的镜像
+使用 zzcabc/danmuji:2.7.0.7 可以拉取指定版本的镜像
 ```
 
 ## 注意：阿里镜像仓库登录有问题，最近懒得搞提交了，请使用dockerhub的镜像，也支持ghcr.io
